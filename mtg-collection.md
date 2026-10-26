@@ -94,8 +94,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Intuizione dello Sbudellatore | Eviscerator's Insight | B | B | Instant | {1}{B} | Modern Horizons 3 | mh3 | 93 | IT | No | 0.26* | 2026-10-25 | | b00573bd-5bbb-4531-a0bb-a40f62b92b88 |
 | 1 | Cast Down | Cast Down | B | B | Instant | {1}{B} | Double Masters | 2xm | 79 | EN | No | 2.22 | 2026-10-25 | | 480fecdd-5978-47e6-9c25-7a04cdf616db |
 | 1 | Cast Down | Cast Down | B | B | Instant | {1}{B} | Dominaria | dom | 81 | EN | No | 1.89 | 2026-10-25 | | 116ce944-6871-4f51-a889-d9c4a5d7cff2 |
-| 3 | Suffocating Fumes | Suffocating Fumes | B | B | Instant | {2}{B} | Ikoria: Lair of Behemoths | iko | 100 | EN | No | 0.51 | 2026-10-25 | Also look shiny; possible foil, confirm | 66b562e4-35df-4aee-848d-ceb4204bbe58 |
-| 1 | Suffocating Fumes | Suffocating Fumes | B | B | Instant | {2}{B} | Ikoria: Lair of Behemoths | iko | 100 | EN | Yes | 2.73 | 2026-10-25 | | 66b562e4-35df-4aee-848d-ceb4204bbe58 |
+| 4 | Suffocating Fumes | Suffocating Fumes | B | B | Instant | {2}{B} | Ikoria: Lair of Behemoths | iko | 100 | EN | Yes | 2.73 | 2026-10-25 | | 66b562e4-35df-4aee-848d-ceb4204bbe58 |
 | 3 | Gingillo Cupo | Grim Bauble | B | B | Artifact | {B} | Aetherdrift | dft | 88 | IT | No | 0.26* | 2026-10-25 | | 9bfdf60a-6f67-4872-8961-d63776b192c3 |
 | 1 | Pestilence | Pestilence | B | B | Enchantment | {2}{B}{B} | Urza's Saga | usg | 147 | EN | No | 0.51 | 2026-10-25 | | 2f1f5630-647f-4789-8506-e7fafcbdd671 |
 | 1 | Hymn to Tourach | Hymn to Tourach | B | B | Sorcery | {B}{B} | Fallen Empires | fem | 38d | EN | No | 0.96 | 2026-10-25 | Scott Kirschner art | 5bc50e08-dd6f-4ea7-87f8-cce72bafb928 |
@@ -131,11 +130,9 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 1 | Armadillo Cloak | Armadillo Cloak | WG | WG | Enchantment | {1}{G}{W} | Invasion | inv | 229 | EN | No | 1.35 | 2026-10-25 | Foil EN ≈ €43 | 9d816f98-6cb6-432c-b0a4-a0eed21658ac |
 | 1 | Folgore Devastante | Blightning | BR | BR | Sorcery | {1}{B}{R} | Shards of Alara | ala | 156 | IT | Yes | 0.88* | 2026-10-25 | foil sheen clearly visible on frame and art (pre-star era); confirm | 3c05e8a2-b7d0-4f24-b2ae-8e4db30e5842 |
 | 1 | Folgore Devastante | Blightning | BR | BR | Sorcery | {1}{B}{R} | Shards of Alara | ala | 156 | IT | No | 0.22* | 2026-10-25 | | 3c05e8a2-b7d0-4f24-b2ae-8e4db30e5842 |
-| 2 | Burning-Tree Emissary | Burning-Tree Emissary | RG | RG | Creature | {R/G}{R/G} | Double Masters 2022 | 2x2 | 189 | EN | Yes | 0.32 | 2026-10-25 | one has readable star + coloured line; other has coloured line and foil sheen; confirm | ba327a5e-bd57-4e24-b4b4-062202df30e1 |
-| 2 | Burning-Tree Emissary | Burning-Tree Emissary | RG | RG | Creature | {R/G}{R/G} | Double Masters 2022 | 2x2 | 189 | EN | No | 0.12 | 2026-10-25 | possible foil; confirm (one shows rainbow on art but collector line reads dot) | ba327a5e-bd57-4e24-b4b4-062202df30e1 |
+| 4 | Burning-Tree Emissary | Burning-Tree Emissary | RG | RG | Creature | {R/G}{R/G} | Double Masters 2022 | 2x2 | 189 | EN | Yes | 0.32 | 2026-10-25 | | ba327a5e-bd57-4e24-b4b4-062202df30e1 |
 | 4 | Abbandonare i Legami | Abandon Attachments | UR | UR | Instant | {1}{U/R} | Avatar: The Last Airbender | tla | 205 | IT | No | 0.35* | 2026-10-25 | | 74ca45a4-97ab-4255-9129-884e8b42b984 |
-| 2 | Agony Warp | Agony Warp | UB | UB | Instant | {U}{B} | Double Masters 2022 | 2x2 | 168 | EN | Yes | 0.12 | 2026-10-25 | coloured collector line + foil sparkle; confirm | 5890a23e-1da0-432b-8dc8-85b92dee9ba1 |
-| 2 | Agony Warp | Agony Warp | UB | UB | Instant | {U}{B} | Double Masters 2022 | 2x2 | 168 | EN | No | 0.08 | 2026-10-25 | possible foil; confirm (frames show some sparkle) | 5890a23e-1da0-432b-8dc8-85b92dee9ba1 |
+| 4 | Agony Warp | Agony Warp | UB | UB | Instant | {U}{B} | Double Masters 2022 | 2x2 | 168 | EN | Yes | 0.12 | 2026-10-25 | | 5890a23e-1da0-432b-8dc8-85b92dee9ba1 |
 | 4 | Inseguire il Passato | Pursue the Past | WR | WR | Sorcery | {R}{W} | Secrets of Strixhaven | sos | 216 | IT | No | 0.14* | 2026-10-25 | | 4584d5f7-b1f1-4c8e-80c5-ad35e44a968e |
 | 4 | Sgranocchiatrice Subdola | Sneaky Snacker | UB | UB | Creature | {U}{B} | Modern Horizons 3 | mh3 | 205 | IT | No | 0.52* | 2026-10-25 | | 0e3aedae-e4bb-48e3-9f8b-bea0430df306 |
 | 4 | Writhing Chrysalis | Writhing Chrysalis | C | RG | Creature | {2}{R}{G} | Modern Horizons 3 | mh3 | 208 | EN | No | 0.42 | 2026-10-25 | | f54dbeb1-51f8-40e2-912a-ec25457de5a2 |
@@ -156,7 +153,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 2 | Chromatic Star | Chromatic Star | C | C | Artifact | {1} | The Brothers' War Retro Artifacts | brr | 11 | EN | No | 0.28 | 2026-10-25 | retro frame, copyright line ends "11" | 669f7205-af98-4e9b-a5d1-2901507c511d |
 | 1 | Sfera Cromatica | Chromatic Sphere | C | C | Artifact | {1} | Mirrodin | mrd | 151 | IT | Yes | 4.52* | 2026-10-25 | clear rainbow foil shine; 151/306 | f31a6dfd-93d2-49c8-a357-9a707b9c42bd |
 | 1 | Reliquia del Progenitus | Relic of Progenitus | C | C | Artifact | {1} | Shards of Alara | ala | 218 | IT | No | 7.81* | 2026-10-25 | holo dot is the green sleeve | 90c41192-64ef-43aa-9af0-75f0d3f56688 |
-| 3 | Nihil Spellbomb | Nihil Spellbomb | C | B | Artifact | {1} | Scars of Mirrodin | som | 187 | EN | No | 4.29 | 2026-10-25 | Foil EN ≈ €27 | 603d217b-6375-46fc-992a-8dbd779da1e5 |
+| 1 | Nihil Spellbomb | Nihil Spellbomb | C | B | Artifact | {1} | Scars of Mirrodin | som | 187 | EN | No | 4.29 | 2026-10-25 | Foil EN ≈ €27 | 603d217b-6375-46fc-992a-8dbd779da1e5 |
 | 3 | Bombarcana Nichilista | Nihil Spellbomb | C | B | Artifact | {1} | Scars of Mirrodin | som | 187 | IT | No | 4.29* | 2026-10-25 | Foil EN ≈ €27 | 603d217b-6375-46fc-992a-8dbd779da1e5 |
 | 4 | Sinistre strix | Baleful Strix | UB | UB | Artifact Creature | {U}{B} | Final Fantasy Commander | fic | 318 | FR | No | 7.92* | 2026-10-25 | | 8396a154-00ec-469f-a083-cd3e0904775c |
 | 4 | Mappa della Spedizione | Expedition Map | C | C | Artifact | {1} | Zendikar | zen | 201 | IT | No | 1.27* | 2026-10-25 | holo dot on one is the green sleeve; Foil EN ≈ €13 | c55bee97-593f-441f-b96c-a998d5212a55 |
@@ -172,12 +169,9 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 1 | Pulce Fastidiosa | Pestermite | U | U | Creature | {2}{U} | Lorwyn | lrw | 78 | IT | No | 0.31* | 2026-10-25 | | f252ae53-443c-4a27-b8f0-639a9a2b8598 |
 | 4 | Folletta Balbettamagie | Spellstutter Sprite | U | U | Creature | {1}{U} | Lorwyn | lrw | 89 | IT | No | 4.67* | 2026-10-25 | copyright 1993-2007 89/301; Foil EN ≈ €22 | 4e5ba4a9-a282-4d4b-b25a-179e05e458f4 |
 | 2 | Murmuring Mystic | Murmuring Mystic | U | U | Creature | {3}{U} | Commander 2020 | c20 | 118 | EN | No | 0.62 | 2026-10-25 | | ab25853c-29d3-4244-88db-813300a262a5 |
-| 2 | Terrore di Tolaria | Tolarian Terror | U | U | Creature | {6}{U} | Foundations | fdn | 167 | IT | No | 0.26* | 2026-10-25 | | 2569d4f3-55ed-4f99-9592-34c7df0aab72 |
-| 2 | Terrore di Tolaria | Tolarian Terror | U | U | Creature | {6}{U} | Foundations | fdn | 167 | IT | Yes | 0.31* | 2026-10-25 | rainbow art + coloured copyright line | 2569d4f3-55ed-4f99-9592-34c7df0aab72 |
-| 3 | Cryptic Serpent | Cryptic Serpent | U | U | Creature | {5}{U}{U} | Commander Masters | cmm | 83 | EN | No | 1.47 | 2026-10-25 | | 7f1af32a-dba2-4c2f-b0ee-9c83849fda53 |
-| 1 | Cryptic Serpent | Cryptic Serpent | U | U | Creature | {5}{U}{U} | Commander Masters | cmm | 83 | EN | Yes | 3.30 | 2026-10-25 | gold/rainbow copyright line | 7f1af32a-dba2-4c2f-b0ee-9c83849fda53 |
-| 2 | Scopritore di Segreti | Delver of Secrets // Insectile Aberration | U | U | Creature | {U} | Innistrad: Midnight Hunt | mid | 47 | IT | No | 0.41* | 2026-10-25 | modern frame, MID symbol; one (row 3 col 1) possible foil; confirm | abff6c81-65a4-48fa-ba8f-580f87b0344a |
-| 1 | Scopritore di Segreti | Delver of Secrets // Insectile Aberration | U | U | Creature | {U} | Innistrad: Midnight Hunt | mid | 47 | IT | Yes | 1.17* | 2026-10-25 | clear holo art | abff6c81-65a4-48fa-ba8f-580f87b0344a |
+| 4 | Terrore di Tolaria | Tolarian Terror | U | U | Creature | {6}{U} | Foundations | fdn | 167 | IT | Yes | 0.31* | 2026-10-25 | | 2569d4f3-55ed-4f99-9592-34c7df0aab72 |
+| 4 | Cryptic Serpent | Cryptic Serpent | U | U | Creature | {5}{U}{U} | Commander Masters | cmm | 83 | EN | Yes | 3.30 | 2026-10-25 | | 7f1af32a-dba2-4c2f-b0ee-9c83849fda53 |
+| 3 | Delver of Secrets // Insectile Aberration | Delver of Secrets // Insectile Aberration | U | U | Creature | {U} | Innistrad Remastered | inr | 60 | EN | Yes | 0.63 | 2026-10-26 | | 6904ea20-e504-47da-95a0-08739fdde260 |
 | 1 | Scopritore di Segreti | Delver of Secrets // Insectile Aberration | U | U | Creature | {U} | Innistrad | isd | 51 | IT | No | 0.59* | 2026-10-25 | old 2011 frame, ISD symbol | 11bf83bb-c95b-4b4f-9a56-ce7a1816307a |
 | 4 | Behold the Multiverse | Behold the Multiverse | U | U | Instant | {3}{U} | Kaldheim | khm | 46 | EN | No | 0.19 | 2026-10-25 | | 27855a38-a682-4f97-ad22-ac625e86faec |
 | 4 | Abile Schivata | Artful Dodge | U | U | Sorcery | {U} | Dark Ascension | dka | 27 | IT | No | 1.27* | 2026-10-25 | copyright 1993-2012 27/158; Foil EN ≈ €8 | de6ce6aa-e19f-4299-9807-e68920e63c73 |
@@ -214,8 +208,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 1 | Nebbia | Fog | G | G | Instant | {G} | Mirage | mir | 216 | IT | No | 0.35* | 2026-10-25 | black border, Harold McNeill | 6d822598-2f0f-45fa-9643-0368e2c0e18b |
 | 2 | Nebbia | Fog | G | G | Instant | {G} | Magic 2012 | m12 | 173 | IT | No | 0.17* | 2026-10-25 | Jaime Jones art; symbol blurry, read as M12 (could be m13 172 / m14 171) | 84387fb5-7929-4d08-9d94-ba2d94460ef3 |
 | 1 | Muro di Radici | Wall of Roots | G | G | Creature | {1}{G} | Mirage | mir | 253 | IT | No | 0.98* | 2026-10-25 | | aeb151d2-c313-44d2-972e-33487f070c23 |
-| 2 | Troublemaker Ouphe | Troublemaker Ouphe | G | G | Creature | {1}{G} | Wilds of Eldraine | woe | 194 | EN | No | 0.43 | 2026-10-25 | | 7f7b2fc0-d3f6-4c4d-a163-986a372e5b12 |
-| 1 | Troublemaker Ouphe | Troublemaker Ouphe | G | G | Creature | {1}{G} | Wilds of Eldraine | woe | 194 | EN | Yes | 2.03 | 2026-10-25 | clearly rainbow foil | 7f7b2fc0-d3f6-4c4d-a163-986a372e5b12 |
+| 3 | Troublemaker Ouphe | Troublemaker Ouphe | G | G | Creature | {1}{G} | Wilds of Eldraine | woe | 194 | EN | Yes | 2.03 | 2026-10-25 | | 7f7b2fc0-d3f6-4c4d-a163-986a372e5b12 |
 | 2 | Crescita Mutagena | Mutagenic Growth | G | G | Instant | {G/P} | New Phyrexia | nph | 116 | IT | No | 2.63* | 2026-10-25 | Foil EN ≈ €13 | af2d23da-70a1-49ba-91bf-c110cc4bbedc |
 | 4 | Boulderbranch Golem | Boulderbranch Golem | C | G | Artifact Creature | {7} | The Brothers' War | bro | 197 | EN | No | 0.44 | 2026-10-25 | | 6e6e5338-9b95-4ac7-a57c-5efaa6423531 |
 | 2 | Priest of Titania | Priest of Titania | G | G | Creature | {1}{G} | Urza's Saga | usg | 270 | EN | No | 2.39 | 2026-10-25 | | 965c33c3-0c68-4516-b8b0-5a0552ed44b6 |
@@ -233,15 +226,15 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Sewer-veillance Cam | Sewer-veillance Cam | U | U | Artifact | {U} | Teenage Mutant Ninja Turtles | tmt | 53 | EN | No | 0.32 | 2026-10-25 | | ab47a37b-b66d-4f70-9bf0-4d5ed6b518f3 |
 | 2 | Visioni del Siero | Serum Visions | U | U | Sorcery | {U} | Fifth Dawn | 5dn | 36 | IT | No | 0.53* | 2026-10-25 | | 4bc61952-88ba-447a-835a-f1e9643fcd0d |
 | 1 | Fremito Spettrale | Ghostly Flicker | U | U | Instant | {2}{U} | Avacyn Restored | avr | 57 | IT | No | 2.39* | 2026-10-25 | Foil EN ≈ €14 | f0a44373-0c50-4e14-a7c6-0de66796b81e |
-| 2 | Vapori Insidiosi | Vapor Snag | U | U | Instant | {U} | New Phyrexia | nph | 48 | IT | No | 0.21* | 2026-10-25 | one copy (top-left of bottom row after rotation) looks shiny: possible foil; confirm | 70305148-23bd-41dd-9de5-13cf5ae591ae |
+| 1 | Vapori Insidiosi | Vapor Snag | U | U | Instant | {U} | New Phyrexia | nph | 48 | IT | No | 0.21* | 2026-10-25 | | 70305148-23bd-41dd-9de5-13cf5ae591ae |
+| 1 | Vapori Insidiosi | Vapor Snag | U | U | Instant | {U} | New Phyrexia | nph | 48 | IT | Yes | 2.51* | 2026-10-26 | | 70305148-23bd-41dd-9de5-13cf5ae591ae |
 | 2 | Узреть Мультивселенную | Behold the Multiverse | U | U | Instant | {3}{U} | Kaldheim | khm | 46 | RU | No | 0.19* | 2026-10-25 | | b043a13e-5f28-4b59-8757-e987b913a2e5 |
 | 4 | Kenku Artificer | Kenku Artificer | U | U | Creature | {2}{U} | Commander Legends: Battle for Baldur's Gate | clb | 80 | EN | No | 0.47 | 2026-10-25 | | 20f30aca-5055-45f1-9121-e7a5675f07e4 |
 | 4 | Archeomante | Archaeomancer | U | U | Creature | {2}{U}{U} | Magic 2013 | m13 | 41 | IT | No | 0.46* | 2026-10-25 | Foil EN ≈ €5 | 73c6d1be-55ad-4ee4-b044-88438e9b78cc |
 | 4 | Accumulated Knowledge | Accumulated Knowledge | U | U | Instant | {1}{U} | Masters 25 | a25 | 40 | EN | No | 0.29 | 2026-10-25 | | ad88e5ee-0eee-47af-a7b4-9bac044e1c8c |
 | 4 | Drossforge Bridge | Drossforge Bridge | C | BR | Artifact Land | | Modern Horizons 2 | mh2 | 246 | EN | No | 1.27 | 2026-10-25 | | 5b46b8d8-723a-4752-b97d-29ef83bd294c |
 | 4 | Ponte di Scogliargento | Silverbluff Bridge | C | UR | Artifact Land | | Modern Horizons 2 | mh2 | 255 | IT | No | 0.33* | 2026-10-25 | | d80dc025-c2c4-48c2-8354-7d9ddb430eb9 |
-| 2 | Citadel Gate | Citadel Gate | C | W | Land | | Commander Legends: Battle for Baldur's Gate | clb | 349 | EN | No | 2.25 | 2026-10-25 | | c0e6f002-9a10-49a1-8604-2b8ff57732dd |
-| 2 | Citadel Gate | Citadel Gate | C | W | Land | | Commander Legends: Battle for Baldur's Gate | clb | 349 | EN | Yes | 2.44 | 2026-10-25 | 2nd and 3rd in top row: rainbow/coloured collector and copyright text and holo sheen; confirm | c0e6f002-9a10-49a1-8604-2b8ff57732dd |
+| 4 | Citadel Gate | Citadel Gate | C | W | Land | | Commander Legends: Battle for Baldur's Gate | clb | 349 | EN | Yes | 2.44 | 2026-10-25 | | c0e6f002-9a10-49a1-8604-2b8ff57732dd |
 | 2 | Conduit Pylons | Conduit Pylons | C | C | Land | | Outlaws of Thunder Junction | otj | 254 | EN | No | 0.24 | 2026-10-25 | | 5ffa48cc-b991-4d47-b7ec-cf678915c758 |
 | 2 | Cratere Fumante | Smoldering Crater | C | R | Land | | Urza's Saga | usg | 328 | IT | No | 0.27* | 2026-10-25 | | e9940ce4-09d7-4e89-b456-e3126a83cfe1 |
 | 2 | Crocevia di Kabira | Kabira Crossroads | C | W | Land | | Zendikar | zen | 216 | IT | No | 0.39* | 2026-10-25 | | a776decb-cdb5-4f41-8a3a-c0cece18eb35 |
@@ -251,7 +244,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Manor Gate | Manor Gate | C | G | Land | | Commander Legends: Battle for Baldur's Gate | clb | 356 | EN | No | 2.04 | 2026-10-25 | photo blurry; no foil colouring seen | 793d4978-9e00-453d-8dc2-6d51ad6c26b7 |
 | 2 | Paesaggio Accogliente | Sheltering Landscape | C | WRG | Land | | Modern Horizons 3 | mh3 | 227 | IT | No | 0.11* | 2026-10-25 | | 0fe070f4-8877-4280-b8fd-869f3ac34ab6 |
 | 2 | Sheltering Landscape | Sheltering Landscape | C | WRG | Land | | Modern Horizons 3 | mh3 | 227 | EN | No | 0.11 | 2026-10-25 | | 0fe070f4-8877-4280-b8fd-869f3ac34ab6 |
-| 1 | Foreboding Landscape | Foreboding Landscape | C | UBG | Land | | Modern Horizons 3 | mh3 | 221 | EN | No | 0.14 | 2026-10-25 | | 57fb0fa7-0c5c-4a75-9461-c51403c30282 |
+| 1 | Foreboding Landscape | Foreboding Landscape | C | UBG | Land | | Modern Horizons 3 | mh3 | 221 | EN | Yes | 0.18 | 2026-10-26 | | 57fb0fa7-0c5c-4a75-9461-c51403c30282 |
 | 1 | Contaminated Landscape | Contaminated Landscape | C | WUB | Land | | Modern Horizons 3 | mh3 | 218 | EN | No | 0.13 | 2026-10-25 | | e2312c49-1627-47ad-8113-78a999a97d8d |
 | 1 | Deceptive Landscape | Deceptive Landscape | C | WBG | Land | | Modern Horizons 3 | mh3 | 219 | EN | No | 0.10 | 2026-10-25 | | 2ae6828e-ff19-45db-8b59-61616353491f |
 | 1 | Bojuka Bog | Bojuka Bog | C | B | Land | | Tarkir: Dragonstorm Commander | tdc | 341 | EN | No | 1.81 | 2026-10-25 | | 38834333-f9ea-43a8-b00a-17935d59eaea |
@@ -285,4 +278,4 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 
 | Cards | Est. EUR |
 |---|---|
-| 704 | ~1094 |
+| 702 | ~1104 |
