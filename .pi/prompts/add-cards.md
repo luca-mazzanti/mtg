@@ -66,12 +66,20 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
 
 ## 4. Update the collection file
 - Keep the existing structure exactly. Table columns, in order:
-  `| Qty | Printed Name | English Name | Color | Type | Set | Code | # | Lang | Foil | EUR | Price date | Notes |`
+  `| Qty | Printed Name | English Name | Color | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
 - Color = Scryfall's `colors` field, which is the judge: do not infer color from the mana cost, frame or art.
   Write it as WUBRG letters in that order (e.g. `R`, `UR`); `C` if empty. So devoid cards (e.g. Fanged Flames)
   are `C` even though they cost red mana, and artifacts with coloured mana costs follow whatever Scryfall says.
   For double-faced cards use the front face (`card_faces[0].colors` when the top-level `colors` is missing).
 - Type = English `type_line` before the `—` (no subtypes), front face only for double-faced/split cards.
+- Mana = Scryfall `mana_cost` exactly as returned, in brace notation (e.g. `{1}{R}`, `{X}{R}{R}`). Empty for lands.
+  If the top-level `mana_cost` is missing, join the faces' non-empty costs with ` // `
+  (so a transforming card with a cost-less back face is just the front cost, e.g. `{U}`).
+- Scryfall ID = the `id` of the exact printing (used by the viewer for images, so it must always be filled):
+  - English rows: the `id` from `/cards/<set>/<#>`.
+  - Non-English rows: the `id` from `/cards/<set>/<#>/<lang>` if that printing exists and its `image_status` is
+    `highres_scan` or `lowres` (a real scan); otherwise the English printing's `id` (Scryfall only has a placeholder image).
+  - Take it from the responses you already fetch for prices; no extra requests.
 - One row per unique combination of Code + # + Lang + Foil.
   If that combination already exists, increase Qty and refresh EUR + Price date instead of adding a new row.
 - Price date = today's date (`date +%Y-%m-%d`).

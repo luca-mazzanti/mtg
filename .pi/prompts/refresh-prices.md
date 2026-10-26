@@ -9,7 +9,7 @@ Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Na
 
 ## Steps
 1. Read the Cards table. Columns, in order:
-   `| Qty | Printed Name | English Name | Set | Code | # | Lang | Foil | EUR | Price date | Notes |`
+   `| Qty | Printed Name | English Name | Color | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
 2. For each row, fetch the printing from the Scryfall API (https://scryfall.com/docs/api) with `curl`,
    sending `-H "User-Agent: pi-mtg/1.0" -H "Accept: application/json"`, waiting ~100 ms between requests:
    - Try the card's language first: `GET https://api.scryfall.com/cards/<code>/<#>/<lang>` (lang in lowercase, e.g. `it`, `de`).
@@ -20,7 +20,7 @@ Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Na
      and keep or update the explanation in Notes.
    - If no price is found at all, keep the old price and add `(not refreshed)` to Notes.
    - Fetch all prices with one script (bash or python3), not one tool call per card.
-3. Update only the EUR and Price date columns (Price date = `date +%Y-%m-%d`). Keep everything else unchanged,
+3. Update only the EUR and Price date columns (never change the Scryfall ID; if a row has none, fill it using the rule in `add-cards.md`) (Price date = `date +%Y-%m-%d`). Keep everything else unchanged,
    except updating price figures mentioned in Notes (e.g. `Foil EN ≈ €29`) if they changed.
 4. Recompute the Summary (total cards = Σ Qty, estimated EUR = Σ Qty × EUR) with `python3`, not by hand.
 
