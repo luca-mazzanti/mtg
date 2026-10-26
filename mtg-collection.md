@@ -21,8 +21,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 2 | Antico Rancore | Ancient Grudge | R | RG | Instant | {1}{R} | Innistrad | isd | 127 | IT | No | 0.25* | 2026-10-25 | | e5e7b966-7c5b-44e6-a6df-4bd7af4edaa9 |
 | 1 | Bauchschuss | Gut Shot | R | R | Instant | {R/P} | New Phyrexia | nph | 86 | DE | No | 5.24* | 2026-10-25 | Foil EN ≈ €29 | ad582629-4985-411b-999d-2eb3d14bbba8 |
 | 3 | Colpo di Budella | Gut Shot | R | R | Instant | {R/P} | New Phyrexia | nph | 86 | IT | No | 5.24* | 2026-10-25 | Foil EN ≈ €29 | a54a2a30-b96a-49c7-9151-1f4b0d4a4413 |
-| 1 | Faithless Looting | Faithless Looting | R | R | Sorcery | {R} | Innistrad Remastered | inr | 151 | EN | No | 0.79 | 2026-10-25 | | 52e47757-0aa9-48b0-8b43-e2483d7eed67 |
-| 1 | Faithless Looting | Faithless Looting | R | R | Sorcery | {R} | Innistrad Remastered | inr | 151 | EN | Yes | 1.25 | 2026-10-25 | Foil (judging by the shine in the photo; confirm) | 52e47757-0aa9-48b0-8b43-e2483d7eed67 |
+| 2 | Faithless Looting | Faithless Looting | R | R | Sorcery | {R} | Innistrad Remastered | inr | 151 | EN | Yes | 1.25 | 2026-10-25 | | 52e47757-0aa9-48b0-8b43-e2483d7eed67 |
 | 2 | Saccheggio degli Infedeli | Faithless Looting | R | R | Sorcery | {R} | Dark Ascension | dka | 87 | IT | No | 0.39* | 2026-10-25 | | a1b0da17-d595-441d-811c-a2d28d2bb232 |
 | 4 | Red Elemental Blast | Red Elemental Blast | R | R | Instant | {R} | Revised Edition | 3ed | 171 | EN | No | 6.51 | 2026-10-25 | White border; no © 1995 line = Revised | 2d83a2a3-5495-4457-8eb7-9f9a75da6cc3 |
 | 4 | Pyroblast | Pyroblast | R | R | Instant | {R} | World Championship Decks 1998 | wc98 | bs213sb | EN | No | 3.49 | 2026-10-25 | Gold border (Brian Selden SB), not tournament legal | 4ed2611b-8e9f-42e2-8271-25e602a2bfa9 |
@@ -31,8 +30,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Dardo di Lava | Lava Dart | R | R | Instant | {R} | Modern Horizons | mh1 | 134 | IT | No | 0.93* | 2026-10-25 | Foil EN ≈ €15 | b16dd041-451d-4914-8c46-aa315a90d802 |
 | 3 | Gettato nel Fuoco | Cast into the Fire | R | R | Instant | {1}{R} | The Lord of the Rings: Tales of Middle-earth | ltr | 118 | IT | No | 0.88 | 2026-10-25 | | 2ef878cb-27b6-47d8-ad11-bd20529b0e7e |
 | 2 | Makeshift Munitions | Makeshift Munitions | R | R | Enchantment | {1}{R} | Commander Masters | cmm | 242 | EN | No | 0.30 | 2026-10-25 | | 60715b6d-b223-431a-85d8-27d7c05469b2 |
-| 3 | Grab the Prize | Grab the Prize | R | R | Sorcery | {1}{R} | Duskmourn: House of Horror | dsk | 138 | EN | No | 0.72 | 2026-10-25 | | 50895202-f1a1-4840-a11a-55b78b8b5929 |
-| 1 | Grab the Prize | Grab the Prize | R | R | Sorcery | {1}{R} | Duskmourn: House of Horror | dsk | 138 | EN | Yes | 0.98 | 2026-10-25 | Foil judging by the shine in the photo; confirm | 50895202-f1a1-4840-a11a-55b78b8b5929 |
+| 4 | Grab the Prize | Grab the Prize | R | R | Sorcery | {1}{R} | Duskmourn: House of Horror | dsk | 138 | EN | Yes | 0.98 | 2026-10-25 | | 50895202-f1a1-4840-a11a-55b78b8b5929 |
 | 4 | Temperamento Focoso | Fiery Temper | R | R | Instant | {1}{R}{R} | Torment | tor | 97 | IT | No | 0.45* | 2026-10-25 | Foil EN ≈ €18.5 | 918e46b7-cbca-4acf-8e83-94b5fcadcc49 |
 | 4 | Highway Robbery | Highway Robbery | R | R | Sorcery | {1}{R} | Outlaws of Thunder Junction | otj | 129 | EN | No | 0.93 | 2026-10-25 | | 31a88429-9204-4a23-a7a8-babbd6bab79f |
 | 2 | Fireblast | Fireblast | R | R | Instant | {4}{R}{R} | Premium Deck Series: Fire and Lightning | pd2 | 26 | EN | Yes | 2.11 | 2026-10-25 | Set is foil-only | 14d6bfda-c066-4cc0-b317-3d8c7c168546 |
@@ -53,8 +51,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Sciamano di Krark-Clan | Krark-Clan Shaman | R | R | Creature | {R} | Mirrodin | mrd | 98 | IT | No | 6.89* | 2026-10-25 | Foil EN ≈ €29 | 975f9ea8-af2c-456f-acd0-ffa9ea0d98c1 |
 | 1 | Chain Lightning | Chain Lightning | R | R | Sorcery | {R} | Premium Deck Series: Fire and Lightning | pd2 | 16 | EN | Yes | 0.94 | 2026-10-25 | Set is foil-only | 9ca05db2-ad92-4f4a-992d-b7f08f4f9c26 |
 | 4 | Kessig Flamebreather | Kessig Flamebreather | R | R | Creature | {1}{R} | Innistrad: Crimson Vow | vow | 164 | EN | No | 4.12 | 2026-10-25 | | 303ad78a-b02a-44dc-afe6-7f95781a5062 |
-| 3 | Voldaren Epicure | Voldaren Epicure | R | R | Creature | {R} | Innistrad Remastered | inr | 182 | EN | No | 0.34 | 2026-10-25 | | e8fe855c-fe94-4de7-a033-9892a9d6ee0e |
-| 1 | Voldaren Epicure | Voldaren Epicure | R | R | Creature | {R} | Innistrad Remastered | inr | 182 | EN | Yes | 0.26 | 2026-10-25 | Foil judging by the shine in the photo; confirm | e8fe855c-fe94-4de7-a033-9892a9d6ee0e |
+| 4 | Voldaren Epicure | Voldaren Epicure | R | R | Creature | {R} | Innistrad Remastered | inr | 182 | EN | Yes | 0.26 | 2026-10-25 | | e8fe855c-fe94-4de7-a033-9892a9d6ee0e |
 | 4 | Cecchino | Guttersnipe | R | R | Creature | {2}{R} | Ravnica Remastered | rvr | 110 | IT | No | 0.38* | 2026-10-25 | | 48eeb13e-26f8-4fc7-8850-d38790317ea4 |
 | 4 | Goblin in Agguato | Goblin Bushwhacker | R | R | Creature | {R} | Zendikar | zen | 125 | IT | No | 1.91* | 2026-10-25 | Foil EN ≈ €7.8 | 4085a5bf-a71b-4c73-9b39-0dcc328fe11b |
 | 4 | Goblin Razziatore di Tombe | Goblin Tomb Raider | R | R | Creature | {R} | The Lost Caverns of Ixalan | lci | 151 | IT | No | 0.35* | 2026-10-25 | | 018160fe-f602-43f5-8495-241a08eaa69c |
@@ -65,8 +62,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 3 | Fiamme Azzannanti | Fanged Flames | C | R | Sorcery | {1}{R} | Modern Horizons 3 | mh3 | 118 | IT | No | 0.06* | 2026-10-25 | | fcfac301-55db-49a7-9a0d-918c907703da |
 | 1 | Siege Smash | Siege Smash | R | R | Instant | {1}{R} | Modern Horizons 3 | mh3 | 136 | EN | No | 0.14 | 2026-10-25 | | f33e3b25-76f5-4263-a309-9ea97f2d8248 |
 | 4 | Experimental Synthesizer | Experimental Synthesizer | R | R | Artifact | {R} | Kamigawa: Neon Dynasty | neo | 138 | EN | No | 0.75 | 2026-10-25 | | c47931c9-685d-4b83-8299-bc347224b4e8 |
-| 3 | Clockwork Percussionist | Clockwork Percussionist | R | R | Artifact Creature | {R} | Duskmourn: House of Horror | dsk | 130 | EN | No | 0.17 | 2026-10-25 | 3 copies also look shiny; possible foil, confirm | 10986e5a-9fc6-41e2-8352-289328245171 |
-| 1 | Clockwork Percussionist | Clockwork Percussionist | R | R | Artifact Creature | {R} | Duskmourn: House of Horror | dsk | 130 | EN | Yes | 0.27 | 2026-10-25 | | 10986e5a-9fc6-41e2-8352-289328245171 |
+| 4 | Clockwork Percussionist | Clockwork Percussionist | R | R | Artifact Creature | {R} | Duskmourn: House of Horror | dsk | 130 | EN | Yes | 0.27 | 2026-10-25 | | 10986e5a-9fc6-41e2-8352-289328245171 |
 | 2 | Gorilla Shaman | Gorilla Shaman | R | R | Creature | {R} | Alliances | all | 72b | EN | No | 0.72 | 2026-10-25 | Kaysa flavor = 72b variant | 5a16231c-1f73-4dec-9d88-e3d62e93a70f |
 | 1 | Sciamano dei Gorilla | Gorilla Shaman | R | R | Creature | {R} | Alliances | all | 72b | IT | No | 0.72* | 2026-10-25 | Kaysa flavor = 72b variant | 5a16231c-1f73-4dec-9d88-e3d62e93a70f |
 | 4 | Transazione dell'Ineluttabile | Reckoner's Bargain | B | B | Instant | {1}{B} | Kamigawa: Neon Dynasty | neo | 120 | IT | No | 1.66* | 2026-10-25 | | 6338942d-d650-4571-8ec6-4d658792c53e |
@@ -289,4 +285,4 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 
 | Cards | Est. EUR |
 |---|---|
-| 704 | ~1093 |
+| 704 | ~1094 |
