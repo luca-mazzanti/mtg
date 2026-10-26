@@ -14,7 +14,7 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 | `screenshots/` | Photos of binder pages (and deck lists) that the cards were read from. |
 | `decks.json` | Decks saved from the viewer. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
-| `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards` and `refresh-prices`. |
+| `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards`, `refresh-prices` and `missing-cards`. |
 
 ## Run the viewer locally
 
@@ -77,7 +77,7 @@ cache** in the page footer to force a refresh.
 
 ## Updating the collection with pi
 
-[pi](https://pi.dev) is a coding agent for the terminal. The two prompt templates in `.pi/prompts/` become
+[pi](https://pi.dev) is a coding agent for the terminal. The prompt templates in `.pi/prompts/` become
 `/` commands when you run pi from this folder (pi asks you to trust the project the first time).
 
 Install pi (needs Node.js 22.19+):
@@ -133,5 +133,16 @@ and recomputes the summary.
 
 It reports the rows whose price changed (old → new), anything it could not refresh, and the old vs new
 estimated total. It never changes the Scryfall ID (it only fills it in if a row has none).
+
+### `/missing-cards`: what am I missing for a deck?
+
+Downloads a decklist from an MTGGoldfish archetype or deck page, compares it with `mtg-collection.md` (same
+rules as the viewer: any printing/language/foil counts, basic lands are always owned, main deck is served before
+the sideboard) and lists the missing cards with the cheapest EUR price on Scryfall and a copy-pasteable buy list.
+It only reads files; nothing is changed. If MTGGoldfish shows a captcha, it asks you to paste the list instead.
+
+```text
+/missing-cards https://www.mtggoldfish.com/archetype/pauper-grixis-affinity#paper
+```
 
 After editing a prompt in `.pi/prompts/`, run `/reload` in an open pi session to pick up the change.
