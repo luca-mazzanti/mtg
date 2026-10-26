@@ -9,7 +9,7 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 
 | Path | What it is |
 |---|---|
-| `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, type, mana cost, EUR price, notes and Scryfall ID. |
+| `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, color identity, type, mana cost, EUR price, notes and Scryfall ID. |
 | `processed-screenshots.md` | Log of binder photos already added, so they are never counted twice. |
 | `screenshots/` | Photos of binder pages (and deck lists) that the cards were read from. |
 | `decks.json` | Decks saved from the viewer. |
@@ -114,7 +114,7 @@ In short, it:
 4. **Prices each card in EUR**. `*` means the English price of the same printing, used because Scryfall
    has none for that language; `~` means an estimate. Notes call out when the foil is worth much more.
 5. **Updates the table.** It adds a row per printing (or increases Qty if the printing is already there)
-   and fills Color, Type and Mana cost. It also fills the Scryfall ID, using the localized printing when
+   and fills Color, Identity, Type and Mana cost. It also fills the Scryfall ID, using the localized printing when
    Scryfall has a real scan of it. Then it recomputes the summary.
 6. **Logs the photos** in `processed-screenshots.md`.
 7. **Reports** what was added, the new totals, the photos it skipped, and a "confirm in hand" list for

@@ -25,7 +25,7 @@ Only read files and fetch web pages. Do not edit `mtg-collection.md` or `decks.j
 ## 2. Compare with the collection
 Do it in one `python3` script, using the same rules as the viewer (`viewer/common.js`, `checkDeck`):
 - Read the Cards table. Columns, in order:
-  `| Qty | Printed Name | English Name | Color | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
+  `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
 - Owned copies of a card = sum of Qty over **all** rows with that English Name (any printing, language or foil).
 - Match names case-insensitively, front face only (text before ` // `), with `’` normalised to `'`.
 - Basic lands (Plains, Island, Swamp, Mountain, Forest, Wastes, and Snow-Covered versions) are not tracked: count them as owned.

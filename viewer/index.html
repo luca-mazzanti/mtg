@@ -140,9 +140,9 @@ function filtered() {
   const q = state.q.toLowerCase();
   let out = cards.filter(r => {
     if (q && !`${r.name} ${r.printed} ${r.setName} ${r.set} ${r.type} ${r.notes}`.toLowerCase().includes(q)) return false;
-    if (state.colors.size && !state.colors.has(colorKey(r.color)) && !(state.colors.has(r.color))) {
-      // multicolor cards also match each of their component colors
-      if (!(r.color.length > 1 && [...r.color].some(c => state.colors.has(c)))) return false;
+    if (state.colors.size && !state.colors.has(colorKey(r.identity)) && !(state.colors.has(r.identity))) {
+      // multicolor identities also match each of their component colors
+      if (!(r.identity.length > 1 && [...r.identity].some(c => state.colors.has(c)))) return false;
     }
     if (state.type && !r.type.split(' ').includes(state.type)) return false;
     if (state.set && r.set !== state.set) return false;
@@ -205,12 +205,12 @@ function render() {
         </div>
       </div>`).join('') + '</div>';
   } else {
-    const cols = [['qty','Qty','num'],['name','Name'],['printed','Printed name'],['color','Color'],['type','Type'],['cmc','Mana'],['setName','Set'],['num','#'],['lang','Lang'],['foil','Foil'],['priceVal','EUR','num'],['value','Total','num'],['notes','Notes']];
+    const cols = [['qty','Qty','num'],['name','Name'],['printed','Printed name'],['color','Color'],['identity','Identity'],['type','Type'],['cmc','Mana'],['setName','Set'],['num','#'],['lang','Lang'],['foil','Foil'],['priceVal','EUR','num'],['value','Total','num'],['notes','Notes']];
     rows.forEach(r => r.value = r.qty * r.priceVal);
     main.innerHTML = `<table><thead><tr>${cols.map(([k, l, c]) => `<th data-k="${k}" class="${c || ''}">${l}${state.tableSort && state.tableSort.key === k ? (state.tableSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>` +
       rows.map(r => `<tr data-img="${esc(r.img)}" data-fallback="${esc(r.imgEn)}">
         <td class="num">${r.qty}</td><td><a href="${r.link}" target="_blank" rel="noopener">${esc(r.name)}</a></td>
-        <td>${r.printed !== r.name ? esc(r.printed) : ''}</td><td>${pips(r.color)}</td><td>${esc(r.type)}</td><td class="mana">${MTG.manaHtml(r.mana)}</td>
+        <td>${r.printed !== r.name ? esc(r.printed) : ''}</td><td>${pips(r.color)}</td><td>${pips(r.identity)}</td><td>${esc(r.type)}</td><td class="mana">${MTG.manaHtml(r.mana)}</td>
         <td title="${esc(r.set)}">${esc(r.setName)}</td><td>${esc(r.num)}</td><td>${esc(r.lang)}</td><td>${r.foil === 'Yes' ? '✨' : ''}</td>
         <td class="num">${esc(r.price)}</td><td class="num">${r.value.toFixed(2)}</td><td>${esc(r.notes)}</td></tr>`).join('') + '</tbody></table>';
     main.querySelectorAll('th').forEach(th => th.onclick = () => {

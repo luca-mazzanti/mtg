@@ -66,11 +66,13 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
 
 ## 4. Update the collection file
 - Keep the existing structure exactly. Table columns, in order:
-  `| Qty | Printed Name | English Name | Color | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
+  `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
 - Color = Scryfall's `colors` field, which is the judge: do not infer color from the mana cost, frame or art.
   Write it as WUBRG letters in that order (e.g. `R`, `UR`); `C` if empty. So devoid cards (e.g. Fanged Flames)
   are `C` even though they cost red mana, and artifacts with coloured mana costs follow whatever Scryfall says.
   For double-faced cards use the front face (`card_faces[0].colors` when the top-level `colors` is missing).
+- Identity = Scryfall's `color_identity` field (top level, which also covers double-faced cards). Same WUBRG-letter format as Color,
+  `C` if empty. It can be wider than Color: it includes color symbols in rules/reminder text and the land-type mana of lands.
 - Type = English `type_line` before the `—` (no subtypes), front face only for double-faced/split cards.
 - Mana = Scryfall `mana_cost` exactly as returned, in brace notation (e.g. `{1}{R}`, `{X}{R}{R}`). Empty for lands.
   If the top-level `mana_cost` is missing, join the faces' non-empty costs with ` // `
