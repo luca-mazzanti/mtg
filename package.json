@@ -1,0 +1,12 @@
+{
+  "name": "mtg-collection",
+  "private": true,
+  "description": "Local viewer for mtg-collection.md",
+  "scripts": {
+    "start": "node viewer/server.js --open",
+    "serve": "node viewer/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

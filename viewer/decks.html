@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decks · MTG Collection</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="titlebar">
+    <h1>Decks <span class="stats" id="stats"></span></h1>
+    <span class="spacer"></span>
+    <button class="primary" id="newDeck">+ New deck</button>
+    <span id="nav"></span>
+  </div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+<footer><a href="#" onclick="MTG.clearCache(); location.reload(); return false">Clear Scryfall cache</a> · Ownership is checked against <code>mtg-collection.md</code>; decks are saved in <code>decks.json</code>.</footer>
+
+<script src="/common.js"></script>
+<script>
+const { esc, decks, ownedIndex, loadCollection, parseDecklist, checkDeck, artUrl } = MTG;
+document.getElementById('nav').outerHTML = MTG.nav('decks');
+
+async function render() {
+  const main = document.getElementById('main');
+  try {
+    const [list, collection] = await Promise.all([decks.list(), loadCollection()]);
+    const idx = ownedIndex(collection);
+    document.getElementById('stats').innerHTML = `<b>${list.length}</b> deck${list.length === 1 ? '' : 's'}`;
+    if (!list.length) {
+      main.innerHTML = '<div class="empty">No decks yet. Click <b>+ New deck</b> to add one.</div>';
+      return;
+    }
+    list.sort((a, b) => a.name.localeCompare(b.name));
+    main.innerHTML = '<div class="decks">' + list.map(d => {
+      const r = checkDeck(parseDecklist(d.list), idx), t = r.totals;
+      const need = t.main + t.side, have = t.mainHave + t.sideHave, pct = need ? Math.round(100 * have / need) : 0;
+      return `<a class="deck-tile" href="/deck.html?id=${encodeURIComponent(d.id)}">
+        <div class="art" style="background-image:url('${esc(artUrl(d.thumbnail))}')"></div>
+        <div class="body">
+          <div class="name">${esc(d.name)}</div>
+          <div class="meta"><span>${t.main} main${t.side ? ` + ${t.side} side` : ''}</span>
+            <span>${t.missing ? `${t.missing} missing` : 'complete ✔'}</span></div>
+          <div class="bar ${pct < 100 ? 'partial' : ''}" title="${have}/${need} owned"><span style="width:${pct}%"></span></div>
+        </div></a>`;
+    }).join('') + '</div>';
+  } catch (e) {
+    main.innerHTML = `<div class="error">Could not load decks: ${esc(e.message)}</div>`;
+  }
+}
+
+document.getElementById('newDeck').onclick = () => {
+  const m = MTG.openModal('New deck', MTG.deckFormHtml() + '<div class="row"><button class="primary" id="save">Create deck</button></div>');
+  const btn = m.el.querySelector('#save');
+  btn.onclick = async () => {
+    const err = m.el.querySelector('.form-err');
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      const d = await decks.create(await MTG.readDeckForm(m.el));
+      location.href = '/deck.html?id=' + encodeURIComponent(d.id);
+    } catch (e) {
+      err.textContent = e.message; btn.disabled = false; btn.textContent = 'Create deck';
+    }
+  };
+  m.el.querySelector('[name=name]').focus();
+};
+
+render();
+</script>
+</body>
+</html>

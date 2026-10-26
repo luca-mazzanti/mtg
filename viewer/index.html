@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTG Collection</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="titlebar">
+    <h1>MTG Collection <span class="stats" id="stats"></span></h1>
+    <span class="spacer"></span>
+    <button class="primary" id="checkDeck">Check decklist</button>
+    <span id="nav"></span>
+  </div>
+  <div class="controls">
+    <input type="search" id="q" placeholder="Search name, set, type, notes…">
+    <div class="colors" id="colors">
+      <button data-c="W" title="White">W</button><button data-c="U" title="Blue">U</button><button data-c="B" title="Black">B</button>
+      <button data-c="R" title="Red">R</button><button data-c="G" title="Green">G</button><button data-c="C" title="Colorless">C</button>
+      <button data-c="M" title="Multicolor">M</button>
+    </div>
+    <select id="type"><option value="">All types</option></select>
+    <select id="set"><option value="">All sets</option></select>
+    <select id="lang"><option value="">All languages</option></select>
+    <select id="foil"><option value="">Foil + non-foil</option><option value="Yes">Foil only</option><option value="No">Non-foil only</option></select>
+    <select id="sort" title="Sort by">
+      <option value="set">Sort: set (release order, then #)</option>
+      <option value="value">Sort: total value</option>
+      <option value="price">Sort: price each</option>
+      <option value="name">Sort: name</option>
+      <option value="color">Sort: color</option>
+      <option value="cmc">Sort: mana value</option>
+      <option value="qty">Sort: quantity</option>
+    </select>
+    <select id="order" title="Order"><option value="asc">Ascending</option><option value="desc">Descending</option></select>
+    <span class="spacer"></span>
+    <label class="zoom" title="Gallery card size">Zoom
+      <select id="zoom"><option value="120">XS</option><option value="150">S</option><option value="190">M</option><option value="250">L</option><option value="330">XL</option></select></label>
+    <button id="viewGrid" class="active">Gallery</button><button id="viewTable">Table</button>
+  </div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+<img class="hover-img" id="hover">
+<footer><a href="#" onclick="MTG.clearCache(); location.reload(); return false">Clear Scryfall cache</a> · Data and images from <a href="https://scryfall.com">Scryfall</a>. Prices are Scryfall EUR estimates; <code>*</code> = English price of the same printing, <code>~</code> = estimate.</footer>
+
+<script src="/common.js"></script>
+<script>
+document.getElementById('nav').outerHTML = MTG.nav('collection');
+document.getElementById('checkDeck').onclick = () => MTG.openChecker();
+const SRC = '/mtg-collection.md';
+const COLOR_ORDER = 'WUBRGMC';
+const MAIN_TYPES = ['Creature','Instant','Sorcery','Artifact','Enchantment','Land','Planeswalker','Battle'];
+const prefs = JSON.parse(localStorage.getItem('collection-prefs') || '{}');
+const state = { q: '', colors: new Set(), type: '', set: '', lang: '', foil: '', sort: prefs.sort || 'set', order: prefs.order || 'asc',
+  zoom: prefs.zoom || '190', view: 'grid', tableSort: null };
+const savePrefs = () => localStorage.setItem('collection-prefs', JSON.stringify({ sort: state.sort, order: state.order, zoom: state.zoom }));
+let setRelease = new Map();   // set code -> release date (Scryfall)
+let cards = [];
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const priceNum = p => { const v = parseFloat(String(p).replace(/[^0-9.]/g, '')); return isNaN(v) ? 0 : v; };
+const colorKey = c => c.length > 1 ? 'M' : c;
+const eur = v => '€' + v.toFixed(2);
+
+// Rows with a Scryfall ID get their image straight from the ID (no API call).
+function applyIds(rows) {
+  for (const r of rows) {
+    const langPart = r.lang.toLowerCase() !== 'en' ? '/' + r.lang.toLowerCase() : '';
+    r.link = `https://scryfall.com/card/${r.set}/${encodeURIComponent(r.num)}${langPart}`;
+    if (r.sid) r.img = r.imgEn = MTG.imageUrl(r.sid, 'normal');
+  }
+  return rows.filter(r => !r.sid);
+}
+
+// Fallback for rows without an ID: batch-fetch image URLs via /cards/collection (75 identifiers per request).
+async function loadImages(rows) {
+  const keyOf = (s, n) => `${s}/${n}`.toLowerCase();
+  const uniq = [...new Map(rows.map(r => [keyOf(r.set, r.num), { set: r.set, collector_number: r.num }])).values()];
+  const info = {};
+  for (let i = 0; i < uniq.length; i += 75) {
+    try {
+      const res = await fetch('https://api.scryfall.com/cards/collection', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ identifiers: uniq.slice(i, i + 75) })
+      });
+      const data = await res.json();
+      for (const c of data.data || []) {
+        const uris = c.image_uris || (c.card_faces && c.card_faces[0].image_uris) || {};
+        info[keyOf(c.set, c.collector_number)] = { small: uris.small, normal: uris.normal, uri: c.scryfall_uri, id: c.id };
+      }
+    } catch (e) { console.warn('Scryfall batch failed', e); }
+    await new Promise(r => setTimeout(r, 120));
+  }
+  for (const r of rows) {
+    const i = info[keyOf(r.set, r.num)] || {};
+    r.imgEn = i.normal || ''; r.img = r.imgEn;
+  }
+}
+
+// Localised scans for non-English cards: batched searches per language (25 cards per query).
+// Only real scans are used; Scryfall placeholders ("Localized Image Not Available") keep the English image.
+async function loadLocalizedImages(rows, onBatch) {
+  const byLang = {};
+  for (const r of rows) {
+    const l = r.lang.toLowerCase();
+    if (l === 'en') continue;
+    (byLang[l] ||= new Map()).set(`${r.set}/${r.num}`.toLowerCase(), r);
+  }
+  for (const [lang, map] of Object.entries(byLang)) {
+    const keys = [...map.keys()];
+    for (let i = 0; i < keys.length; i += 25) {
+      const q = `lang:${lang} (` + keys.slice(i, i + 25).map(k => { const [s, n] = k.split('/'); return `(s:${s} cn:"${n}")`; }).join(' or ') + ')';
+      let url = 'https://api.scryfall.com/cards/search?' + new URLSearchParams({ q, unique: 'prints', include_multilingual: 'true', include_extras: 'true' });
+      try {
+        while (url) {
+          const data = await (await fetch(url, { headers: { Accept: 'application/json' } })).json();
+          for (const c of data.data || []) {
+            if (!['highres_scan', 'lowres'].includes(c.image_status)) continue;
+            const uris = c.image_uris || (c.card_faces && c.card_faces[0].image_uris) || {};
+            const key = `${c.set}/${c.collector_number}`.toLowerCase();
+            for (const r of rows) if (`${r.set}/${r.num}`.toLowerCase() === key && r.lang.toLowerCase() === lang && uris.normal) r.img = uris.normal;
+          }
+          url = data.has_more ? data.next_page : null;
+          await new Promise(r => setTimeout(r, 120));
+        }
+      } catch (e) { console.warn('Scryfall localized batch failed', e); }
+      onBatch && onBatch();
+    }
+  }
+}
+
+function fillSelect(id, values, label = v => v) {
+  const el = document.getElementById(id);
+  for (const v of values) { const o = document.createElement('option'); o.value = v; o.textContent = label(v); el.appendChild(o); }
+}
+
+function filtered() {
+  const q = state.q.toLowerCase();
+  let out = cards.filter(r => {
+    if (q && !`${r.name} ${r.printed} ${r.setName} ${r.set} ${r.type} ${r.notes}`.toLowerCase().includes(q)) return false;
+    if (state.colors.size && !state.colors.has(colorKey(r.color)) && !(state.colors.has(r.color))) {
+      // multicolor cards also match each of their component colors
+      if (!(r.color.length > 1 && [...r.color].some(c => state.colors.has(c)))) return false;
+    }
+    if (state.type && !r.type.split(' ').includes(state.type)) return false;
+    if (state.set && r.set !== state.set) return false;
+    if (state.lang && r.lang !== state.lang) return false;
+    if (state.foil && r.foil !== state.foil) return false;
+    return true;
+  });
+  // All comparators are ascending; the Order dropdown flips them.
+  const bySet = (a, b) => (setRelease.get(a.set) || '9999').localeCompare(setRelease.get(b.set) || '9999')
+    || a.setName.localeCompare(b.setName) || a.num.localeCompare(b.num, undefined, { numeric: true })
+    || a.lang.localeCompare(b.lang) || a.foil.localeCompare(b.foil);
+  const by = {
+    set: bySet,
+    value: (a, b) => a.qty * a.priceVal - b.qty * b.priceVal || bySet(a, b),
+    price: (a, b) => a.priceVal - b.priceVal || bySet(a, b),
+    name: (a, b) => a.name.localeCompare(b.name) || bySet(a, b),
+    color: (a, b) => COLOR_ORDER.indexOf(colorKey(a.color)) - COLOR_ORDER.indexOf(colorKey(b.color)) || a.name.localeCompare(b.name),
+    cmc: (a, b) => a.cmc - b.cmc || a.name.localeCompare(b.name),
+    qty: (a, b) => a.qty - b.qty || a.name.localeCompare(b.name),
+  };
+  const dir = state.order === 'desc' ? -1 : 1;
+  out.sort((a, b) => dir * by[state.sort](a, b));
+  if (state.view === 'table' && state.tableSort) {
+    const { key, dir } = state.tableSort;
+    out.sort((a, b) => {
+      const x = a[key], y = b[key];
+      return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), undefined, { numeric: true })) * dir;
+    });
+  }
+  return out;
+}
+
+const pips = color => [...color].map(c => `<span class="pip" style="background:var(--${c})" title="${c}"></span>`).join('');
+
+function render() {
+  const rows = filtered();
+  const totalCards = rows.reduce((s, r) => s + r.qty, 0);
+  const totalEur = rows.reduce((s, r) => s + r.qty * r.priceVal, 0);
+  const allCards = cards.reduce((s, r) => s + r.qty, 0);
+  document.getElementById('stats').innerHTML =
+    `<b>${totalCards}</b> cards (${rows.length} printings) · <b>${eur(totalEur)}</b>` +
+    (totalCards !== allCards ? ` <span>of ${allCards}</span>` : '');
+  const main = document.getElementById('main');
+  if (!rows.length) { main.innerHTML = '<div class="empty">No cards match these filters.</div>'; return; }
+  if (state.view === 'grid') {
+    main.innerHTML = `<div class="grid" style="--card-w:${state.zoom}px">` + rows.map(r => `
+      <div class="card">
+        <a class="img" href="${r.link}" target="_blank" rel="noopener">
+          <img loading="lazy" src="${esc(r.img)}" data-fallback="${esc(r.imgEn)}" alt="${esc(r.name)}"
+               onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}">
+          <span class="badge qty">×${r.qty}</span>${r.foil === 'Yes' ? '<span class="badge foil">FOIL</span>' : ''}
+        </a>
+        <div class="info">
+          <div class="name" title="${esc(r.name)}">${pips(r.color)} ${esc(r.name)}</div>
+          <div class="mana-line">${MTG.manaHtml(r.mana)}</div>
+          ${r.printed !== r.name ? `<div class="printed" title="${esc(r.printed)}">${esc(r.printed)}</div>` : ''}
+          <div class="meta"><span title="${esc(r.setName)}">${esc(r.set.toUpperCase())} #${esc(r.num)} · ${esc(r.lang)}</span>
+            <span class="price">${r.price.includes('?') ? '?' : '€' + esc(r.price)}</span></div>
+          ${r.notes ? `<div class="notes">${esc(r.notes)}</div>` : ''}
+        </div>
+      </div>`).join('') + '</div>';
+  } else {
+    const cols = [['qty','Qty','num'],['name','Name'],['printed','Printed name'],['color','Color'],['type','Type'],['cmc','Mana'],['setName','Set'],['num','#'],['lang','Lang'],['foil','Foil'],['priceVal','EUR','num'],['value','Total','num'],['notes','Notes']];
+    rows.forEach(r => r.value = r.qty * r.priceVal);
+    main.innerHTML = `<table><thead><tr>${cols.map(([k, l, c]) => `<th data-k="${k}" class="${c || ''}">${l}${state.tableSort && state.tableSort.key === k ? (state.tableSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>` +
+      rows.map(r => `<tr data-img="${esc(r.img)}" data-fallback="${esc(r.imgEn)}">
+        <td class="num">${r.qty}</td><td><a href="${r.link}" target="_blank" rel="noopener">${esc(r.name)}</a></td>
+        <td>${r.printed !== r.name ? esc(r.printed) : ''}</td><td>${pips(r.color)}</td><td>${esc(r.type)}</td><td class="mana">${MTG.manaHtml(r.mana)}</td>
+        <td title="${esc(r.set)}">${esc(r.setName)}</td><td>${esc(r.num)}</td><td>${esc(r.lang)}</td><td>${r.foil === 'Yes' ? '✨' : ''}</td>
+        <td class="num">${esc(r.price)}</td><td class="num">${r.value.toFixed(2)}</td><td>${esc(r.notes)}</td></tr>`).join('') + '</tbody></table>';
+    main.querySelectorAll('th').forEach(th => th.onclick = () => {
+      const k = th.dataset.k;
+      state.tableSort = state.tableSort && state.tableSort.key === k ? { key: k, dir: -state.tableSort.dir } : { key: k, dir: ['qty','priceVal','value'].includes(k) ? -1 : 1 };
+      render();
+    });
+  }
+}
+
+// Card preview on hover in table view.
+const hover = document.getElementById('hover');
+document.addEventListener('mousemove', e => {
+  const tr = e.target.closest && e.target.closest('tr[data-img]');
+  if (!tr || state.view !== 'table') { hover.style.display = 'none'; return; }
+  if (hover.dataset.src !== tr.dataset.img) {
+    hover.dataset.src = tr.dataset.img; hover.src = tr.dataset.img;
+    hover.onerror = () => { if (tr.dataset.fallback) hover.src = tr.dataset.fallback; };
+  }
+  hover.style.display = 'block';
+  const x = e.clientX + 260 > innerWidth ? e.clientX - 260 : e.clientX + 16;
+  const y = Math.min(e.clientY + 16, innerHeight - 350);
+  hover.style.left = x + 'px'; hover.style.top = y + 'px';
+});
+
+function bind() {
+  const on = (id, ev, fn) => document.getElementById(id).addEventListener(ev, fn);
+  on('q', 'input', e => { state.q = e.target.value; render(); });
+  for (const id of ['type', 'set', 'lang', 'foil', 'sort', 'order', 'zoom']) {
+    const el = document.getElementById(id);
+    if (['sort', 'order', 'zoom'].includes(id)) el.value = state[id];
+    el.addEventListener('change', e => { state[id] = e.target.value; if (id !== 'zoom') state.tableSort = null; savePrefs(); render(); });
+  }
+  document.querySelectorAll('#colors button').forEach(b => b.onclick = () => {
+    const c = b.dataset.c; state.colors.has(c) ? state.colors.delete(c) : state.colors.add(c);
+    b.classList.toggle('active'); render();
+  });
+  on('viewGrid', 'click', () => { state.view = 'grid'; viewGrid.classList.add('active'); viewTable.classList.remove('active'); render(); });
+  on('viewTable', 'click', () => { state.view = 'table'; viewTable.classList.add('active'); viewGrid.classList.remove('active'); render(); });
+}
+
+(async () => {
+  try {
+    const md = await (await fetch(SRC, { cache: 'no-cache' })).text();
+    cards = MTG.parseCollection(md);
+    const scrySets = await MTG.loadSets();
+    setRelease = new Map([...new Set(cards.map(r => r.set))].map(c => [c, scrySets.get(c)?.released || '']));
+    const types = MAIN_TYPES.filter(t => cards.some(r => r.type.split(' ').includes(t)));
+    fillSelect('type', types);
+    // Set dropdown: newest release first.
+    const sets = [...new Map(cards.map(r => [r.set, r.setName])).entries()]
+      .sort((a, b) => (setRelease.get(b[0]) || '').localeCompare(setRelease.get(a[0]) || '') || a[1].localeCompare(b[1]));
+    const setEl = document.getElementById('set');
+    for (const [code, name] of sets) {
+      const o = document.createElement('option'); o.value = code;
+      const year = (setRelease.get(code) || '').slice(0, 4);
+      o.textContent = `${name} (${code.toUpperCase()}${year ? ', ' + year : ''})`; setEl.appendChild(o);
+    }
+    fillSelect('lang', [...new Set(cards.map(r => r.lang))].sort());
+    bind();
+    const noId = applyIds(cards);  // images from the Scryfall ID column
+    render();
+    if (noId.length) {             // only rows without an ID need Scryfall lookups
+      console.info(`${noId.length} rows have no Scryfall ID; looking them up`);
+      await loadImages(noId); render();
+      await loadLocalizedImages(noId); render();
+    }
+  } catch (e) {
+    document.getElementById('main').innerHTML = `<div class="error">Could not load ${SRC}: ${esc(e.message)}<br>Open this page through a web server (e.g. GitHub Pages or <code>python3 -m http.server</code>).</div>`;
+  }
+})();
+</script>
+</body>
+</html>

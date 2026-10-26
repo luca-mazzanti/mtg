@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deck · MTG Collection</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="titlebar">
+    <h1><a class="back" href="/decks.html">← All decks</a></h1>
+    <span class="spacer"></span>
+    <span id="nav"></span>
+  </div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+
+<footer><a href="#" onclick="MTG.clearCache(); location.reload(); return false">Clear Scryfall cache</a> · Card data, prices and images from <a href="https://scryfall.com">Scryfall</a> (lookups cached for a day).</footer>
+
+<script src="/common.js"></script>
+<script>
+const { esc, decks, artUrl } = MTG;
+document.getElementById('nav').outerHTML = MTG.nav('decks');
+const id = new URLSearchParams(location.search).get('id');
+const main = document.getElementById('main');
+let deck, editing = false;
+
+async function load() {
+  try {
+    if (!id) throw new Error('No deck id in the URL.');
+    deck = await decks.get(id);
+    document.title = `${deck.name} · Decks`;
+    render();
+  } catch (e) {
+    main.innerHTML = `<div class="error">${esc(e.message)}<br><a class="back" href="/decks.html">Back to decks</a></div>`;
+  }
+}
+
+function render() {
+  const parsed = MTG.parseDecklist(deck.list);
+  const nMain = MTG.countCards(parsed.main), nSide = MTG.countCards(parsed.side);
+  main.innerHTML = `
+    <div class="deck-hero">
+      <div class="art" style="background-image:url('${esc(artUrl(deck.thumbnail))}')" title="${esc(deck.thumbnail)}"></div>
+      <div>
+        <h2>${esc(deck.name)}</h2>
+        <div class="hint">${nMain} main deck${nSide ? ` · ${nSide} sideboard` : ''} · thumbnail: ${esc(deck.thumbnail)}
+          · updated ${esc(new Date(deck.updatedAt).toLocaleString())}</div>
+        <div class="actions">
+          <button id="toggleEdit" class="${editing ? 'active' : ''}">${editing ? 'Exit edit mode' : 'Edit'}</button>
+          <button id="copyList">Copy decklist</button>
+          ${editing ? '<button class="danger" id="delete">Delete deck</button>' : ''}
+        </div>
+      </div>
+    </div>
+    <div id="body"></div>`;
+
+  document.getElementById('toggleEdit').onclick = () => { editing = !editing; render(); };
+  document.getElementById('copyList').onclick = async e => { await navigator.clipboard.writeText(deck.list); e.target.textContent = 'Copied ✔'; };
+  const body = document.getElementById('body');
+
+  if (editing) {
+    document.getElementById('delete').onclick = async () => {
+      if (!confirm(`Delete "${deck.name}"? This cannot be undone.`)) return;
+      try { await decks.remove(deck.id); location.href = '/decks.html'; } catch (e) { alert(e.message); }
+    };
+    body.innerHTML = `<div class="modal" style="width:auto;margin-top:12px">${MTG.deckFormHtml(deck)}
+      <div class="row"><button class="primary" id="save">Save changes</button><button id="cancel">Cancel</button></div></div>`;
+    document.getElementById('cancel').onclick = () => { editing = false; render(); };
+    const btn = document.getElementById('save');
+    btn.onclick = async () => {
+      const err = body.querySelector('.form-err');
+      err.textContent = ''; btn.disabled = true; btn.textContent = 'Saving…';
+      try {
+        deck = await decks.update(deck.id, await MTG.readDeckForm(body));
+        editing = false; render();
+      } catch (e) { err.textContent = e.message; btn.disabled = false; btn.textContent = 'Save changes'; }
+    };
+    return;
+  }
+
+  body.innerHTML = `
+    <div class="view-opts">
+      <label>Group <select id="group">
+        <option value="type">By type</option><option value="none">None (main deck / sideboard)</option></select></label>
+      <label>Sort by mana value <select id="order">
+        <option value="asc">Ascending</option><option value="desc">Descending</option></select></label>
+    </div>
+    <div id="report"><p class="hint">Checking against the collection…</p></div>`;
+  const opts = { group: localStorage.getItem('deck-group') || 'type', order: localStorage.getItem('deck-order') || 'asc' };
+  const groupEl = document.getElementById('group'), orderEl = document.getElementById('order');
+  groupEl.value = opts.group; orderEl.value = opts.order;
+  const report = document.getElementById('report');
+  let result;
+  const draw = () => MTG.renderCheck(report, result, opts);
+  groupEl.onchange = () => { opts.group = groupEl.value; localStorage.setItem('deck-group', opts.group); draw(); };
+  orderEl.onchange = () => { opts.order = orderEl.value; localStorage.setItem('deck-order', opts.order); draw(); };
+  MTG.loadCollection()
+    .then(rows => { result = MTG.checkDeck(parsed, MTG.ownedIndex(rows)); return draw(); })
+    .catch(e => { report.innerHTML = `<div class="error">${esc(e.message)}</div>`; });
+}
+
+load();
+</script>
+</body>
+</html>
