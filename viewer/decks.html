@@ -12,6 +12,7 @@
   <div class="titlebar">
     <h1>Decks <span class="stats" id="stats"></span></h1>
     <span class="spacer"></span>
+    <button id="newSection">+ New section</button>
     <button class="primary" id="newDeck">+ New deck</button>
     <span id="nav"></span>
   </div>
@@ -24,33 +25,147 @@
 const { esc, decks, ownedIndex, loadCollection, parseDecklist, checkDeck, artUrl } = MTG;
 document.getElementById('nav').outerHTML = MTG.nav('decks');
 
+let layout, byName = {}, idx, tileHtml = {};
+
+// Drop unknown decks, add new ones to the end of "unsorted", and make sure every deck is listed once.
+function normalise(list, stored) {
+  const known = new Set(list.map(d => d.name)), seen = new Set();
+  const keep = names => (names || []).filter(n => known.has(n) && !seen.has(n) && seen.add(n));
+  const out = { unsortedCollapsed: !!stored.unsortedCollapsed, sections: (stored.sections || []).map(s => ({ ...s, decks: keep(s.decks) })), unsorted: keep(stored.unsorted) };
+  out.unsorted.push(...list.map(d => d.name).filter(n => !seen.has(n)).sort((x, y) => x.localeCompare(y)));
+  return out;
+}
+const listOf = id => id === 'unsorted' ? layout.unsorted : layout.sections.find(s => s.id === id).decks;
+const save = () => decks.saveLayout(layout).catch(e => alert('Could not save the layout: ' + e.message));
+
+function tile(d) {
+  const r = checkDeck(parseDecklist(d.list), idx), t = r.totals;
+  const need = t.main + t.side, have = t.mainHave + t.sideHave, pct = need ? Math.round(100 * have / need) : 0;
+  return `<a class="deck-tile" draggable="true" data-name="${esc(d.name)}" href="/deck.html?id=${encodeURIComponent(d.id)}">
+    <div class="art" style="background-image:url('${esc(artUrl(d.thumbnail))}')"></div>
+    <div class="body">
+      <div class="name">${esc(d.name)}</div>
+      <div class="meta"><span>${t.main} main${t.side ? ` + ${t.side} side` : ''}</span>
+        <span>${t.missing ? `${t.missing} missing` : 'complete ✔'}</span></div>
+      <div class="bar ${pct < 100 ? 'partial' : ''}" title="${have}/${need} owned"><span style="width:${pct}%"></span></div>
+    </div></a>`;
+}
+
+function sectionHtml(id, title, names, s) {
+  const collapsed = s?.collapsed;
+  const ctl = s && !s.fixed ? `<button data-act="up" title="Move section up">↑</button><button data-act="down" title="Move section down">↓</button>
+    <button data-act="rename" title="Rename">✎</button><button data-act="delete" title="Delete section (decks go to Unsorted)">✕</button>` : '';
+  return `<section class="deck-section ${collapsed ? 'collapsed' : ''}" data-sec="${esc(id)}">
+    <div class="sec-head"><button class="chev" data-act="toggle" title="Collapse / expand">${collapsed ? '▸' : '▾'}</button>
+      <h2 data-act="toggle">${esc(title)}</h2><span class="count">${names.length}</span><span class="spacer"></span>${ctl}</div>
+    <div class="decks sec-body" data-sec="${esc(id)}">${names.map(n => tileHtml[n]).join('')}${names.length ? '' : '<div class="sec-empty">Drag decks here</div>'}</div>
+  </section>`;
+}
+
+function draw() {
+  const main = document.getElementById('main');
+  const parts = layout.sections.map(s => sectionHtml(s.id, s.name, s.decks, s));
+  // "Unsorted" is only shown with a title once sections exist or while it has decks
+  if (layout.sections.length) parts.push(sectionHtml('unsorted', 'Unsorted', layout.unsorted, { collapsed: layout.unsortedCollapsed, fixed: true }));
+  else parts.push(`<section class="deck-section plain" data-sec="unsorted"><div class="decks sec-body" data-sec="unsorted">${layout.unsorted.map(n => tileHtml[n]).join('')}</div></section>`);
+  main.innerHTML = parts.join('');
+}
+
 async function render() {
   const main = document.getElementById('main');
   try {
-    const [list, collection] = await Promise.all([decks.list(), loadCollection()]);
-    const idx = ownedIndex(collection);
+    const [list, collection, stored] = await Promise.all([decks.list(), loadCollection(), decks.layout()]);
+    idx = ownedIndex(collection);
     document.getElementById('stats').innerHTML = `<b>${list.length}</b> deck${list.length === 1 ? '' : 's'}`;
     if (!list.length) {
       main.innerHTML = '<div class="empty">No decks yet. Click <b>+ New deck</b> to add one.</div>';
       return;
     }
-    list.sort((a, b) => a.name.localeCompare(b.name));
-    main.innerHTML = '<div class="decks">' + list.map(d => {
-      const r = checkDeck(parseDecklist(d.list), idx), t = r.totals;
-      const need = t.main + t.side, have = t.mainHave + t.sideHave, pct = need ? Math.round(100 * have / need) : 0;
-      return `<a class="deck-tile" href="/deck.html?id=${encodeURIComponent(d.id)}">
-        <div class="art" style="background-image:url('${esc(artUrl(d.thumbnail))}')"></div>
-        <div class="body">
-          <div class="name">${esc(d.name)}</div>
-          <div class="meta"><span>${t.main} main${t.side ? ` + ${t.side} side` : ''}</span>
-            <span>${t.missing ? `${t.missing} missing` : 'complete ✔'}</span></div>
-          <div class="bar ${pct < 100 ? 'partial' : ''}" title="${have}/${need} owned"><span style="width:${pct}%"></span></div>
-        </div></a>`;
-    }).join('') + '</div>';
+    byName = Object.fromEntries(list.map(d => [d.name, d]));
+    tileHtml = Object.fromEntries(list.map(d => [d.name, tile(d)]));
+    layout = normalise(list, stored);
+    draw();
   } catch (e) {
     main.innerHTML = `<div class="error">Could not load decks: ${esc(e.message)}</div>`;
   }
 }
+
+// ---- sections: collapse, rename, delete, reorder ----
+document.getElementById('main').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const sec = el.closest('.deck-section'), id = sec.dataset.sec;
+  const i = layout.sections.findIndex(s => s.id === id), s = layout.sections[i], act = el.dataset.act;
+  if (act === 'toggle') {
+    if (id === 'unsorted') layout.unsortedCollapsed = !layout.unsortedCollapsed;
+    else s.collapsed = !s.collapsed;
+  } else if (act === 'rename') {
+    const name = prompt('Section name', s.name)?.trim();
+    if (!name) return;
+    s.name = name;
+  } else if (act === 'delete') {
+    if (!confirm(`Delete the section "${s.name}"? Its decks move to Unsorted.`)) return;
+    layout.unsorted.push(...s.decks);
+    layout.sections.splice(i, 1);
+  } else if (act === 'up' || act === 'down') {
+    const j = act === 'up' ? i - 1 : i + 1;
+    if (j < 0 || j >= layout.sections.length) return;
+    [layout.sections[i], layout.sections[j]] = [layout.sections[j], layout.sections[i]];
+  }
+  save(); draw();
+});
+
+document.getElementById('newSection').onclick = () => {
+  const name = prompt('New section name')?.trim();
+  if (!name) return;
+  layout.sections.push({ id: 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, collapsed: false, decks: [] });
+  save(); draw();
+};
+
+// ---- drag and drop: move a deck to a section, before/after another deck ----
+let dragName = null;
+const clearMarks = () => document.querySelectorAll('.drop-before, .drop-after, .drop-into').forEach(el => el.classList.remove('drop-before', 'drop-after', 'drop-into'));
+const main = document.getElementById('main');
+main.addEventListener('dragstart', e => {
+  const t = e.target.closest?.('.deck-tile');
+  if (!t) return;
+  dragName = t.dataset.name;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragName);
+  setTimeout(() => t.classList.add('dragging'), 0);
+});
+main.addEventListener('dragend', () => { dragName = null; clearMarks(); document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging')); });
+// Where would the deck land? { sec, ref (deck name or null = end), after }
+function target(e) {
+  const tl = e.target.closest('.deck-tile');
+  if (tl && tl.dataset.name !== dragName) {
+    const r = tl.getBoundingClientRect();
+    return { sec: tl.closest('.deck-section').dataset.sec, ref: tl.dataset.name, after: e.clientX > r.left + r.width / 2, el: tl };
+  }
+  const sec = e.target.closest('.deck-section');
+  return sec && !tl ? { sec: sec.dataset.sec, ref: null, el: sec.classList.contains('collapsed') ? sec : sec.querySelector('.sec-body') } : null;
+}
+main.addEventListener('dragover', e => {
+  if (!dragName) return;
+  const t = target(e);
+  clearMarks();
+  if (!t) return;
+  e.preventDefault();
+  t.el.classList.add(t.ref ? (t.after ? 'drop-after' : 'drop-before') : 'drop-into');
+});
+main.addEventListener('drop', e => {
+  if (!dragName) return;
+  const t = target(e);
+  clearMarks();
+  if (!t) return;
+  e.preventDefault();
+  for (const l of [layout.unsorted, ...layout.sections.map(s => s.decks)]) { const k = l.indexOf(dragName); if (k >= 0) l.splice(k, 1); }
+  const dest = listOf(t.sec);
+  const at = t.ref ? dest.indexOf(t.ref) + (t.after ? 1 : 0) : dest.length;
+  dest.splice(at, 0, dragName);
+  dragName = null;
+  save(); draw();
+});
 
 document.getElementById('newDeck').onclick = () => {
   const m = MTG.openModal('New deck', MTG.deckFormHtml() + '<div class="row"><button class="primary" id="save">Create deck</button></div>');

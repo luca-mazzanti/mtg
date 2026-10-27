@@ -54,6 +54,38 @@ async function readDecks() {
   }
   return decks;
 }
+// Deck order and sections for the decks page live in decks/layout.json:
+// {"sections":[{"id","name","collapsed","decks":[deck names]}],"unsorted":[deck names]}. Order = array order.
+// Decks missing from the file show up in "unsorted"; names that no longer exist are ignored by the page.
+const LAYOUT_FILE = path.join(DECKS_DIR, 'layout.json');
+const EMPTY_LAYOUT = { sections: [], unsorted: [] };
+async function readLayout() {
+  try { return JSON.parse(await fs.readFile(LAYOUT_FILE, 'utf8')); }
+  catch (e) { if (e.code === 'ENOENT') return { ...EMPTY_LAYOUT }; throw e; }
+}
+const writeLayout = layout => writeFileAtomic(LAYOUT_FILE, JSON.stringify(layout, null, 2) + '\n');
+function validateLayout(body) {
+  const names = a => { if (!Array.isArray(a) || a.length > 1000 || a.some(n => typeof n !== 'string' || n.length > 200)) throw fail(400, 'Invalid layout'); return a; };
+  if (!Array.isArray(body?.sections) || body.sections.length > 100) throw fail(400, 'Invalid layout');
+  return {
+    sections: body.sections.map(s => {
+      const id = String(s?.id ?? '').slice(0, 40), name = String(s?.name ?? '').trim().slice(0, 100);
+      if (!id || !name) throw fail(400, 'Every section needs an id and a name');
+      return { id, name, collapsed: !!s.collapsed, decks: names(s.decks) };
+    }),
+    unsorted: names(body.unsorted),
+    unsortedCollapsed: !!body.unsortedCollapsed,
+  };
+}
+// Keep the layout in step with deck renames (newName) and deletions (newName = null).
+async function relayout(oldName, newName) {
+  const layout = await readLayout();
+  const fix = list => (list || []).flatMap(n => n !== oldName ? [n] : newName ? [newName] : []);
+  layout.sections = (layout.sections || []).map(s => ({ ...s, decks: fix(s.decks) }));
+  layout.unsorted = fix(layout.unsorted);
+  await writeLayout(layout);
+}
+
 let writing = Promise.resolve();
 const serialised = fn => { const run = writing.then(fn); writing = run.catch(() => {}); return run; };
 async function writeFileAtomic(file, text) { // write temp file, then rename
@@ -105,13 +137,14 @@ async function updateDeck(oldId, d) {
   if (name !== oldId && await exists(file)) throw fail(409, `A deck called "${name}" already exists`);
   const crlf = /\r\n/.test(await fs.readFile(fileOf(oldId), 'utf8')); // keep the file's line endings
   await writeFileAtomic(file, (crlf ? d.list.replace(/\n/g, '\r\n') : d.list) + (crlf ? '\r\n' : '\n'));
-  if (name !== oldId) await fs.unlink(fileOf(oldId));
+  if (name !== oldId) { await fs.unlink(fileOf(oldId)); await relayout(oldId, name); }
   await saveThumb(name, d.thumbnail, oldId);
   return (await readDecks()).find(x => x.id === name);
 }
 async function deleteDeck(id) {
   id = await knownId(id);
   await fs.unlink(fileOf(id));
+  await relayout(id, null);
   const thumbs = await readThumbs();
   if (id in thumbs) { delete thumbs[id]; await writeFileAtomic(THUMBS_FILE, JSON.stringify(thumbs, null, 2) + '\n'); }
 }
@@ -124,6 +157,11 @@ async function readBody(req) {
 
 async function handleApi(req, res, url) {
   const json = (status, data) => { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(data === undefined ? '' : JSON.stringify(data)); };
+  if (/^\/api\/layout\/?$/.test(url.pathname)) {
+    if (req.method === 'GET') return json(200, await readLayout());
+    if (req.method === 'PUT') { const l = validateLayout(await readBody(req)); await serialised(() => writeLayout(l)); return json(200, l); }
+    return json(405, { error: 'Method not allowed' });
+  }
   const m = url.pathname.match(/^\/api\/decks(?:\/([^/]+))?\/?$/);
   if (!m) return json(404, { error: 'Not found' });
   const id = m[1] && decodeURIComponent(m[1]);

@@ -373,6 +373,8 @@ const MTG = (() => {
     create: d => api('POST', '/api/decks', d),
     update: (id, d) => api('PUT', '/api/decks/' + encodeURIComponent(id), d),
     remove: id => api('DELETE', '/api/decks/' + encodeURIComponent(id)),
+    layout: () => api('GET', '/api/layout'),
+    saveLayout: l => api('PUT', '/api/layout', l),
   };
 
   // Deck form (create + edit). Resolves the thumbnail through Scryfall fuzzy search.

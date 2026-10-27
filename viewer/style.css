@@ -92,6 +92,22 @@ td.prints { color: var(--muted); font-size: 12px; }
 /* ---------- decks page ---------- */
 .decks { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .deck-tile { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; color: var(--text); text-decoration: none; display: flex; flex-direction: column; transition: transform .1s, border-color .1s; }
+.deck-section { margin-bottom: 18px; }
+.deck-section.plain { margin-bottom: 0; }
+.sec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.sec-head h2 { margin: 0; font-size: 17px; cursor: pointer; }
+.sec-head .count { color: var(--muted); font-size: 12px; }
+.sec-head .spacer { flex: 1; }
+.sec-head button { padding: 2px 8px; background: transparent; border-color: transparent; color: var(--muted); }
+.sec-head button:hover { color: var(--text); border-color: var(--border); }
+.deck-section.collapsed .sec-body { display: none; }
+.sec-body { min-height: 40px; border-radius: 10px; }
+.sec-empty { grid-column: 1 / -1; color: var(--muted); font-size: 13px; border: 1px dashed var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+.deck-tile[draggable] { cursor: grab; }
+.deck-tile.dragging { opacity: .4; }
+.deck-tile.drop-before { box-shadow: -4px 0 0 var(--accent); }
+.deck-tile.drop-after { box-shadow: 4px 0 0 var(--accent); }
+.sec-body.drop-into, .deck-section.drop-into { outline: 2px dashed var(--accent); outline-offset: 2px; }
 .deck-tile:hover { transform: translateY(-2px); border-color: var(--accent); }
 .deck-tile .art { aspect-ratio: 626/457; background: var(--panel2) center/cover no-repeat; }
 .deck-tile .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; }
