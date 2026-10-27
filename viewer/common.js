@@ -92,10 +92,10 @@ const MTG = (() => {
     for (const line of md.split('\n')) {
       if (!line.startsWith('| ') || line.startsWith('| Qty') || line.startsWith('| Cards')) continue;
       const c = line.trim().replace(/^\||\|$/g, '').split('|').map(s => s.trim());
-      if (c.length !== 15 && c.length !== 16) continue;
-      const [qty, printed, name, color, identity, type, mana, setName, set, num, lang, foil, price, date, notes, sid = ''] = c;
+      if (c.length !== 16 && c.length !== 17) continue;
+      const [qty, printed, name, color, identity, type, mana, setName, set, num, lang, foil, price, date, bought, notes, sid = ''] = c;
       rows.push({ qty: +qty, printed, name, color, identity, type, mana, cmc: manaValue(mana), setName, set, num, lang, foil, price,
-        priceVal: priceNum(price), date, notes, sid: /^[0-9a-f-]{36}$/i.test(sid) ? sid.toLowerCase() : '' });
+        priceVal: priceNum(price), date, bought, boughtVal: priceNum(bought), notes, sid: /^[0-9a-f-]{36}$/i.test(sid) ? sid.toLowerCase() : '' });
     }
     return rows;
   }

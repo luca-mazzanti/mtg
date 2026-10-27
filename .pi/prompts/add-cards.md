@@ -66,7 +66,7 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
 
 ## 4. Update the collection file
 - Keep the existing structure exactly. Table columns, in order:
-  `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
+  `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Bought EUR | Notes | Scryfall ID |`
 - Color = Scryfall's `colors` field, which is the judge: do not infer color from the mana cost, frame or art.
   Write it as WUBRG letters in that order (e.g. `R`, `UR`); `C` if empty. So devoid cards (e.g. Fanged Flames)
   are `C` even though they cost red mana, and artifacts with coloured mana costs follow whatever Scryfall says.

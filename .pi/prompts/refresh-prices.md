@@ -9,7 +9,7 @@ Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Na
 
 ## Steps
 1. Read the Cards table. Columns, in order:
-   `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
+   `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Bought EUR | Notes | Scryfall ID |`
 2. For each row, fetch the printing from the Scryfall API (https://scryfall.com/docs/api) with `curl`,
    sending `-H "User-Agent: pi-mtg/1.0" -H "Accept: application/json"`, waiting ~100 ms between requests:
    - Try the card's language first: `GET https://api.scryfall.com/cards/<code>/<#>/<lang>` (lang in lowercase, e.g. `it`, `de`).
