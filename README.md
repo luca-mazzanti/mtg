@@ -15,7 +15,8 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 | `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck. |
 | `receipts/` | CardTrader order spreadsheets (`.xls`). The Bought EUR column of the collection comes from them. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
-| `.claude/skills/` | [Claude Code](https://claude.com/claude-code) skills: `add-cards` and `refresh-prices`. |
+| `.claude/skills/` | [Claude Code](https://claude.com/claude-code) skills: `add-cards`, `refresh-prices` and `analyse-meta`. |
+| `reports/` | Metagame reports written by `/analyse-meta`, one per run, named with the date and window. |
 
 ## Run the viewer locally
 
@@ -131,5 +132,20 @@ and recomputes the summary.
 
 It reports the rows whose price changed (old → new), anything it could not refresh, and the old vs new
 estimated total. It never changes the Scryfall ID (it only fills it in if a row has none).
+
+### `/analyse-meta`: which meta cards am I missing
+
+Reads the Pauper metagame on [DeckScout](https://deckscout.fyi/metagame/pauper) for a time window and checks the top
+mainboard and sideboard cards of every archetype against `mtg-collection.md`.
+
+```text
+/analyse-meta          # asks for the window: 7d, 14d, 30d or 90d (default 30d)
+/analyse-meta 14
+```
+
+It writes `reports/report-<date>-<days>d.md` with a summary table (coverage per archetype, cards and copies short),
+takeaways, a "most useful cards to buy" table and one section per archetype. Copies needed are the site's average
+copies per deck rounded to whole numbers; cards are matched by English name, ignoring printing, language and foil.
+The numbers come from `.claude/skills/analyse-meta/generate-report.js`, not from the model.
 
 The skills live in `.claude/skills/<name>/SKILL.md`; edit them there to change the behaviour.
