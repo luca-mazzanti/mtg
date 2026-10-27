@@ -5,7 +5,7 @@ argument-hint: "<mtggoldfish-url> [more-urls...]"
 Tell me which cards I'm missing, and how many copies of each, to build the deck(s) at: $@
 
 Collection file: `mtg-collection.md` in the project root (the folder containing `.pi/`).
-Only read files and fetch web pages. Do not edit `mtg-collection.md` or `decks.json`.
+Only read files and fetch web pages. Do not edit `mtg-collection.md` or anything in `decks/`.
 
 ## 1. Get the decklist
 - Works with MTGGoldfish archetype pages (`/archetype/...`) and deck pages (`/deck/<id>`). Drop any `#paper` / `#online`

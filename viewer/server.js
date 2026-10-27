@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 // Local viewer for mtg-collection.md + decks. No dependencies: `npm start` (or `node viewer/server.js`).
-// Serves the pages, the live collection file and a small JSON API for decks stored in decks.json.
+// Serves the pages, the live collection file and a small JSON API for the decklists stored as text files in decks/.
 const http = require('node:http');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const crypto = require('node:crypto');
 const { exec } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const DECKS_FILE = path.join(ROOT, 'decks.json');
+const DECKS_DIR = path.join(ROOT, 'decks');
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '127.0.0.1'; // local only
 
@@ -19,18 +18,60 @@ const STATIC = {
 };
 
 // ---------- decks storage ----------
+// One plain-text decklist per deck in decks/<name>.txt (the usual "4 Card Name" format; a blank line or a
+// "Sideboard" line starts the sideboard; "(SET) 123" suffixes are fine). The file name is the deck name.
+// The thumbnail card is not part of the text format: it lives in decks/thumbnails.json, and decks without an
+// entry use their first non-basic card.
+const BASIC_LANDS = new Set(['plains', 'island', 'swamp', 'mountain', 'forest', 'wastes',
+  'snow-covered plains', 'snow-covered island', 'snow-covered swamp', 'snow-covered mountain', 'snow-covered forest']);
+const THUMBS_FILE = path.join(DECKS_DIR, 'thumbnails.json');
+const textOf = raw => raw.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').replace(/\s+$/, '');
+function firstSpell(list) {
+  for (const line of list.split('\n')) {
+    if (/^(sideboard|side board|sb)\s*:?\s*$/i.test(line.trim())) break;
+    const m = line.trim().match(/^\d+\s*x?\s+(.+?)(\s+\([A-Za-z0-9]{2,6}\)(\s+[\w★-]+)?)?$/i);
+    if (m && !BASIC_LANDS.has(m[1].toLowerCase())) return m[1].split(' // ')[0];
+  }
+  return '';
+}
+async function readThumbs() {
+  try { return JSON.parse(await fs.readFile(THUMBS_FILE, 'utf8')); }
+  catch (e) { if (e.code === 'ENOENT') return {}; throw e; }
+}
 async function readDecks() {
-  try { return JSON.parse(await fs.readFile(DECKS_FILE, 'utf8')); }
+  let names;
+  try { names = await fs.readdir(DECKS_DIR); }
   catch (e) { if (e.code === 'ENOENT') return []; throw e; }
+  const thumbs = await readThumbs();
+  const decks = [];
+  for (const file of names.filter(n => /\.txt$/i.test(n)).sort((x, y) => x.localeCompare(y))) {
+    const full = path.join(DECKS_DIR, file);
+    const [raw, st] = await Promise.all([fs.readFile(full, 'utf8'), fs.stat(full)]);
+    const name = file.replace(/\.txt$/i, '');
+    const list = textOf(raw);
+    decks.push({ id: name, name, thumbnail: thumbs[name] || firstSpell(list), list,
+      createdAt: (st.birthtimeMs ? st.birthtime : st.mtime).toISOString(), updatedAt: st.mtime.toISOString() });
+  }
+  return decks;
 }
 let writing = Promise.resolve();
-function writeDecks(decks) { // serialised + atomic (write temp file, then rename)
-  writing = writing.then(async () => {
-    const tmp = DECKS_FILE + '.tmp';
-    await fs.writeFile(tmp, JSON.stringify(decks, null, 2) + '\n');
-    await fs.rename(tmp, DECKS_FILE);
-  });
-  return writing;
+const serialised = fn => { const run = writing.then(fn); writing = run.catch(() => {}); return run; };
+async function writeFileAtomic(file, text) { // write temp file, then rename
+  const tmp = file + '.tmp';
+  await fs.writeFile(tmp, text);
+  await fs.rename(tmp, file);
+}
+const fileOf = name => path.join(DECKS_DIR, name + '.txt');
+const fail = (status, message) => Object.assign(new Error(message), { status });
+const exists = file => fs.access(file).then(() => true, () => false);
+// Deck name -> safe file name stem.
+const fileStem = name => name.replace(/[\\/:*?"<>|\x00-\x1f]+/g, ' ').replace(/\s+/g, ' ').replace(/^[. ]+|[. ]+$/g, '').slice(0, 120);
+
+async function saveThumb(name, thumbnail, oldName) {
+  const thumbs = await readThumbs();
+  if (oldName && oldName !== name) delete thumbs[oldName];
+  thumbs[name] = thumbnail;
+  await writeFileAtomic(THUMBS_FILE, JSON.stringify(thumbs, null, 2) + '\n');
 }
 function validate(body) {
   const d = {
@@ -38,13 +79,42 @@ function validate(body) {
     thumbnail: String(body?.thumbnail ?? '').trim(),
     list: String(body?.list ?? '').replace(/\r\n/g, '\n').replace(/\s+$/, ''),
   };
-  if (!d.name) throw Object.assign(new Error('Deck name is required'), { status: 400 });
-  if (!d.thumbnail) throw Object.assign(new Error('Thumbnail card is required'), { status: 400 });
-  if (!d.list) throw Object.assign(new Error('Decklist is required'), { status: 400 });
-  if (d.name.length > 200 || d.thumbnail.length > 200 || d.list.length > 20000) throw Object.assign(new Error('Too long'), { status: 400 });
+  if (!d.name) throw fail(400, 'Deck name is required');
+  if (!fileStem(d.name)) throw fail(400, 'Deck name has no usable characters');
+  if (!d.thumbnail) throw fail(400, 'Thumbnail card is required');
+  if (!d.list) throw fail(400, 'Decklist is required');
+  if (d.name.length > 200 || d.thumbnail.length > 200 || d.list.length > 20000) throw fail(400, 'Too long');
   return d;
 }
-const slug = s => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'deck';
+async function createDeck(d) {
+  const name = fileStem(d.name), file = fileOf(name);
+  if (await exists(file)) throw fail(409, `A deck called "${name}" already exists`);
+  await writeFileAtomic(file, d.list + '\n');
+  await saveThumb(name, d.thumbnail);
+  return (await readDecks()).find(x => x.id === name);
+}
+// Deck ids are file names: only ever used after matching a name read from the folder, never joined from input.
+async function knownId(id) {
+  const found = (await readDecks()).find(x => x.id === id);
+  if (!found) throw fail(404, 'Deck not found');
+  return found.id;
+}
+async function updateDeck(oldId, d) {
+  oldId = await knownId(oldId);
+  const name = fileStem(d.name), file = fileOf(name);
+  if (name !== oldId && await exists(file)) throw fail(409, `A deck called "${name}" already exists`);
+  const crlf = /\r\n/.test(await fs.readFile(fileOf(oldId), 'utf8')); // keep the file's line endings
+  await writeFileAtomic(file, (crlf ? d.list.replace(/\n/g, '\r\n') : d.list) + (crlf ? '\r\n' : '\n'));
+  if (name !== oldId) await fs.unlink(fileOf(oldId));
+  await saveThumb(name, d.thumbnail, oldId);
+  return (await readDecks()).find(x => x.id === name);
+}
+async function deleteDeck(id) {
+  id = await knownId(id);
+  await fs.unlink(fileOf(id));
+  const thumbs = await readThumbs();
+  if (id in thumbs) { delete thumbs[id]; await writeFileAtomic(THUMBS_FILE, JSON.stringify(thumbs, null, 2) + '\n'); }
+}
 
 async function readBody(req) {
   let data = '';
@@ -60,25 +130,11 @@ async function handleApi(req, res, url) {
   const decks = await readDecks();
   const i = id ? decks.findIndex(d => d.id === id) : -1;
   if (id && i < 0) return json(404, { error: 'Deck not found' });
-  const now = new Date().toISOString();
-
   if (!id && req.method === 'GET') return json(200, decks);
-  if (!id && req.method === 'POST') {
-    const d = validate(await readBody(req));
-    const deck = { id: `${slug(d.name)}-${crypto.randomBytes(3).toString('hex')}`, ...d, createdAt: now, updatedAt: now };
-    decks.push(deck); await writeDecks(decks);
-    return json(201, deck);
-  }
+  if (!id && req.method === 'POST') { const d = validate(await readBody(req)); return json(201, await serialised(() => createDeck(d))); }
   if (id && req.method === 'GET') return json(200, decks[i]);
-  if (id && req.method === 'PUT') {
-    const d = validate(await readBody(req));
-    decks[i] = { ...decks[i], ...d, updatedAt: now }; await writeDecks(decks);
-    return json(200, decks[i]);
-  }
-  if (id && req.method === 'DELETE') {
-    decks.splice(i, 1); await writeDecks(decks);
-    return json(204);
-  }
+  if (id && req.method === 'PUT') { const d = validate(await readBody(req)); return json(200, await serialised(() => updateDeck(id, d))); }
+  if (id && req.method === 'DELETE') { await serialised(() => deleteDeck(id)); return json(204); }
   return json(405, { error: 'Method not allowed' });
 }
 

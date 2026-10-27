@@ -1,0 +1,26 @@
+2 Abandon Attachments (tla) 205
+1 Agony Warp (mm3) 150
+1 Cast Down (dom) 81
+4 Contaminated Aquifer (fic) 383
+4 Counterspell (fca) 4
+1 Deep Analysis (dmr) 46
+2 Gurmag Angler (frf) 72
+2 Ice Tunnel (khm) 262
+10 Island (thb) 251
+4 Lorien Revealed (ltr) 60
+4 Mental Note (plist) 46
+1 Murmuring Mystic (plist) 45
+4 Sneaky Snacker (mh3) 205
+4 Snuff Out (fic) 285
+2 Spell Pierce (xln) 81
+4 Thought Scour (ddm) 21
+4 Tolarian Terror (fdn) 167
+2 Unexpected Fangs (plist) 102
+4 Brainstorm (fca) 28
+
+2 Annul (khm) 42
+1 Arms of Hadar (clb) 113
+1 Extract a Confession (mkm) 84
+2 Nihil Spellbomb (plist) 187
+3 Steel Sabotage (2xm) 70
+1 Thorn of the Black Rose (cmm) 190

@@ -12,7 +12,7 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 | `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, color identity, type, mana cost, EUR price, notes and Scryfall ID. |
 | `processed-screenshots.md` | Log of binder photos already added, so they are never counted twice. |
 | `screenshots/` | Photos of binder pages (and deck lists) that the cards were read from. |
-| `decks.json` | Decks saved from the viewer. |
+| `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
 | `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards`, `refresh-prices` and `missing-cards`. |
 
@@ -52,7 +52,7 @@ The server listens on `127.0.0.1` only, so it is reachable from your computer an
 | Use another port (e.g. 4000) | `PORT=4000 npm run serve` | `$env:PORT=4000; npm run serve` | `set PORT=4000 && npm run serve` |
 | Run without npm | `node viewer/server.js` | `node viewer\server.js` | `node viewer\server.js` |
 
-The server reads `mtg-collection.md` and `decks.json` on every request, so after adding cards or editing
+The server reads `mtg-collection.md` and the `decks/` folder on every request, so after adding cards or editing
 files just refresh the browser. No restart is needed.
 
 ### What the viewer does
@@ -66,6 +66,8 @@ files just refresh the browser. No restart is needed.
 - **Decks** (`/decks.html`): your saved decks with completion bars. Create a deck with a name, a
   thumbnail card and a decklist; open one to see the full ownership report, grouped by card type and
   sorted by mana value. Edit mode lets you change or delete it.
+  Every `.txt` file in `decks/` is a deck, named after the file; a deck without a saved thumbnail uses its first
+  non-basic card. Editing or deleting a deck in the viewer changes the file.
 
 Decklist format: one card per line as `4 Card name` (`4x Card name` and MTG Arena lines like
 `4 Lightning Bolt (M11) 149` also work). A blank line, a `Sideboard` line or an `SB:` prefix starts the
