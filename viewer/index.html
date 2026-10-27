@@ -15,7 +15,7 @@
     <span id="nav"></span>
   </div>
   <div class="controls">
-    <input type="search" id="q" placeholder="Search name, set, type, notes…">
+    <input type="search" id="q" placeholder="Search card name…">
     <div class="colors" id="colors">
       <button data-c="W" title="White">W</button><button data-c="U" title="Blue">U</button><button data-c="B" title="Black">B</button>
       <button data-c="R" title="Red">R</button><button data-c="G" title="Green">G</button><button data-c="C" title="Colorless">C</button>
@@ -139,7 +139,7 @@ function fillSelect(id, values, label = v => v) {
 function filtered() {
   const q = MTG.fold(state.q).trim();
   let out = cards.filter(r => {
-    if (q && !MTG.fold(`${r.name} ${r.printed} ${r.setName} ${r.set} ${r.type} ${r.notes}`).includes(q)) return false;
+    if (q && !MTG.fold(`${r.name} ${r.printed}`).includes(q)) return false;
     if (state.colors.size && !state.colors.has(colorKey(r.identity)) && !(state.colors.has(r.identity))) {
       // multicolor identities also match each of their component colors
       if (!(r.identity.length > 1 && [...r.identity].some(c => state.colors.has(c)))) return false;
