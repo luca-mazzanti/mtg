@@ -9,12 +9,13 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 
 | Path | What it is |
 |---|---|
-| `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, color identity, type, mana cost, EUR price, notes and Scryfall ID. |
+| `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, color identity, type, mana cost, EUR price, what I paid (Bought EUR), notes and Scryfall ID. |
 | `processed-screenshots.md` | Log of binder photos already added, so they are never counted twice. |
 | `screenshots/` | Photos of binder pages (and deck lists) that the cards were read from. |
 | `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck. |
+| `receipts/` | CardTrader order spreadsheets (`.xls`). The Bought EUR column of the collection comes from them. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
-| `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards`, `refresh-prices` and `missing-cards`. |
+| `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards` and `refresh-prices`. |
 
 ## Run the viewer locally
 
@@ -141,16 +142,5 @@ and recomputes the summary.
 
 It reports the rows whose price changed (old → new), anything it could not refresh, and the old vs new
 estimated total. It never changes the Scryfall ID (it only fills it in if a row has none).
-
-### `/missing-cards`: what am I missing for a deck?
-
-Downloads a decklist from an MTGGoldfish archetype or deck page, compares it with `mtg-collection.md` (same
-rules as the viewer: any printing/language/foil counts, basic lands are always owned, main deck is served before
-the sideboard) and lists the missing cards with the cheapest EUR price on Scryfall and a copy-pasteable buy list.
-It only reads files; nothing is changed. If MTGGoldfish shows a captcha, it asks you to paste the list instead.
-
-```text
-/missing-cards https://www.mtggoldfish.com/archetype/pauper-grixis-affinity#paper
-```
 
 After editing a prompt in `.pi/prompts/`, run `/reload` in an open pi session to pick up the change.
