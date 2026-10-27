@@ -204,7 +204,8 @@ function render() {
           <div class="mana-line">${MTG.manaHtml(r.mana)}</div>
           ${r.printed !== r.name ? `<div class="printed" title="${esc(r.printed)}">${esc(r.printed)}</div>` : ''}
           <div class="meta"><span title="${esc(r.setName)}">${esc(r.set.toUpperCase())} #${esc(r.num)} · ${esc(r.lang)}</span>
-            <span class="price"${r.bought ? ` title="Paid €${esc(r.bought)} each"` : ''}>${r.price.includes('?') ? '?' : '€' + esc(r.price)}</span></div>
+            <span class="price">${r.price.includes('?') ? '?' : '€' + esc(r.price)}</span></div>
+          ${r.bought ? `<div class="paid" title="Bought EUR per copy"><span>Paid €${esc(r.bought)}</span>${r.qty > 1 ? `<span>€${(r.qty * r.boughtVal).toFixed(2)} for ${r.qty}</span>` : ''}</div>` : ''}
           ${r.notes ? `<div class="notes">${esc(r.notes)}</div>` : ''}
         </div>
       </div>`).join('') + '</div>';
