@@ -182,9 +182,13 @@ function render() {
   const totalCards = rows.reduce((s, r) => s + r.qty, 0);
   const totalEur = rows.reduce((s, r) => s + r.qty * r.priceVal, 0);
   const allCards = cards.reduce((s, r) => s + r.qty, 0);
+  // Paid = copies × Bought EUR (per copy); only rows with a receipt price count.
+  const paidRows = rows.filter(r => r.bought);
+  const totalPaid = paidRows.reduce((s, r) => s + r.qty * r.boughtVal, 0), paidCards = paidRows.reduce((s, r) => s + r.qty, 0);
   document.getElementById('stats').innerHTML =
     `<b>${totalCards}</b> cards (${rows.length} printings) · <b>${eur(totalEur)}</b>` +
-    (totalCards !== allCards ? ` <span>of ${allCards}</span>` : '');
+    (totalCards !== allCards ? ` <span>of ${allCards}</span>` : '') +
+    (paidRows.length ? ` · paid <b title="Copies × Bought EUR. ${paidCards} of ${totalCards} cards have a bought price.">${eur(totalPaid)}</b>` : '');
   const main = document.getElementById('main');
   if (!rows.length) { main.innerHTML = '<div class="empty">No cards match these filters.</div>'; return; }
   if (state.view === 'grid') {
@@ -200,22 +204,22 @@ function render() {
           <div class="mana-line">${MTG.manaHtml(r.mana)}</div>
           ${r.printed !== r.name ? `<div class="printed" title="${esc(r.printed)}">${esc(r.printed)}</div>` : ''}
           <div class="meta"><span title="${esc(r.setName)}">${esc(r.set.toUpperCase())} #${esc(r.num)} · ${esc(r.lang)}</span>
-            <span class="price">${r.price.includes('?') ? '?' : '€' + esc(r.price)}</span></div>
+            <span class="price"${r.bought ? ` title="Paid €${esc(r.bought)} each"` : ''}>${r.price.includes('?') ? '?' : '€' + esc(r.price)}</span></div>
           ${r.notes ? `<div class="notes">${esc(r.notes)}</div>` : ''}
         </div>
       </div>`).join('') + '</div>';
   } else {
-    const cols = [['qty','Qty','num'],['name','Name'],['printed','Printed name'],['color','Color'],['identity','Identity'],['type','Type'],['cmc','Mana'],['setName','Set'],['num','#'],['lang','Lang'],['foil','Foil'],['priceVal','EUR','num'],['value','Total','num'],['notes','Notes']];
-    rows.forEach(r => r.value = r.qty * r.priceVal);
+    const cols = [['qty','Qty','num'],['name','Name'],['printed','Printed name'],['color','Color'],['identity','Identity'],['type','Type'],['cmc','Mana'],['setName','Set'],['num','#'],['lang','Lang'],['foil','Foil'],['priceVal','EUR','num'],['value','Total','num'],['boughtVal','Bought','num'],['paid','Paid','num'],['notes','Notes']];
+    rows.forEach(r => { r.value = r.qty * r.priceVal; r.paid = r.qty * r.boughtVal; });
     main.innerHTML = `<table><thead><tr>${cols.map(([k, l, c]) => `<th data-k="${k}" class="${c || ''}">${l}${state.tableSort && state.tableSort.key === k ? (state.tableSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>` +
       rows.map(r => `<tr data-img="${esc(r.img)}" data-fallback="${esc(r.imgEn)}">
         <td class="num">${r.qty}</td><td><a href="${r.link}" target="_blank" rel="noopener">${esc(r.name)}</a></td>
         <td>${r.printed !== r.name ? esc(r.printed) : ''}</td><td>${pips(r.color)}</td><td>${pips(r.identity)}</td><td>${esc(r.type)}</td><td class="mana">${MTG.manaHtml(r.mana)}</td>
         <td title="${esc(r.set)}">${esc(r.setName)}</td><td>${esc(r.num)}</td><td>${esc(r.lang)}</td><td>${r.foil === 'Yes' ? '✨' : ''}</td>
-        <td class="num">${esc(r.price)}</td><td class="num">${r.value.toFixed(2)}</td><td>${esc(r.notes)}</td></tr>`).join('') + '</tbody></table>';
+        <td class="num">${esc(r.price)}</td><td class="num">${r.value.toFixed(2)}</td><td class="num">${esc(r.bought)}</td><td class="num">${r.bought ? r.paid.toFixed(2) : ''}</td><td>${esc(r.notes)}</td></tr>`).join('') + '</tbody></table>';
     main.querySelectorAll('th').forEach(th => th.onclick = () => {
       const k = th.dataset.k;
-      state.tableSort = state.tableSort && state.tableSort.key === k ? { key: k, dir: -state.tableSort.dir } : { key: k, dir: ['qty','priceVal','value'].includes(k) ? -1 : 1 };
+      state.tableSort = state.tableSort && state.tableSort.key === k ? { key: k, dir: -state.tableSort.dir } : { key: k, dir: ['qty','priceVal','value','boughtVal','paid'].includes(k) ? -1 : 1 };
       render();
     });
   }
