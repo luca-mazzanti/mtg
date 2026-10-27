@@ -120,8 +120,8 @@ In short, it:
    set symbol, collector line, copyright line, artist, border, frame and foil.
 3. **Finds the exact printing on Scryfall**, using tips for old sets (Revised vs Fourth Edition, foreign
    black border, gold-bordered World Championship cards, retro frames, and so on).
-4. **Prices each card in EUR**. `*` means the English price of the same printing, used because Scryfall
-   has none for that language; `~` means an estimate. Notes call out when the foil is worth much more.
+4. **Prices each card in EUR** from Scryfall. When Scryfall has no price for the card's language, the English
+   price of the same printing is used.
 5. **Updates the table.** It adds a row per printing (or increases Qty if the printing is already there)
    and fills Color, Identity, Type and Mana cost. It also fills the Scryfall ID, using the localized printing when
    Scryfall has a real scan of it. Then it recomputes the summary.
@@ -132,7 +132,7 @@ In short, it:
 ### `/refresh-prices`: update prices
 
 Re-fetches the EUR price of every row (or only some rows) from Scryfall and updates the EUR and Price date
-columns. It uses the same `*` / `~` rules as `/add-cards`, updates foil-price figures mentioned in Notes,
+columns. It uses the same fallback rules as `/add-cards`
 and recomputes the summary.
 
 ```text

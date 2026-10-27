@@ -34,7 +34,7 @@ Collection file: `mtg-collection.md` in the project root (the folder containing 
 - Modern cards (2015+) show `★` instead of `•` in the collector line on foils; that line often looks rainbow/blue.
 - Sleeve glare can fake a foil shine; check the collector line first.
 - If Scryfall `finishes` is only `["foil"]` (e.g. Premium Deck Series, many promos), the card is foil.
-- If still unsure, record it as non-foil and write "possible foil; confirm" in Notes.
+- If still unsure, record it as non-foil and put it in the "confirm in hand" list in your report (Notes stays empty).
 
 ## 2. Find the exact printing on Scryfall
 Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always sending
@@ -59,10 +59,9 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
 
 ## 3. Prices
 - Use the EUR price (`prices.eur`, or `prices.eur_foil` for foils), taken from `/cards/<set>/<num>/<lang>`
-  (`/en` for English and for the `*` fallback) so prices are consistent.
-- Scryfall rarely prices non-English cards. If the card's language has no price, use the English price of the same printing and mark it with `*`.
-- If the printing has no English version (e.g. `4bb`), use another language's price as a guide, prefix it with `~`, and explain in Notes.
-- Mention in Notes if the foil version is worth much more (e.g. `Foil EN ≈ €29`).
+  (`/en` for English and for the English fallback) so prices are consistent.
+- Scryfall rarely prices non-English cards. If the card's language has no price, use the English price of the same printing.
+- If the printing has no English version (e.g. `4bb`), use another language's price as a guide.
 
 ## 4. Update the collection file
 - Keep the existing structure exactly. Table columns, in order:
@@ -86,7 +85,7 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
   If that combination already exists, increase Qty and refresh EUR + Price date instead of adding a new row.
 - Price date = today's date (`date +%Y-%m-%d`).
 - Do not add page/slot, condition, artist or USD columns.
-- Empty Notes cells are written as `| |` (single space).
+- Leave Notes empty: write the cell as `| |` (single space). Prices in EUR are plain numbers (e.g. `1.25`), with no `*` or `~` markers.
 - Recompute the Summary (total cards, estimated EUR = Σ Qty × EUR) with `python3`, not by hand.
 
 ## 5. Report back

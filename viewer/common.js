@@ -226,7 +226,7 @@ const MTG = (() => {
 
   // ---------- rendering ----------
   function printingsText(rows) {
-    return rows.map(r => `${r.qty}× ${r.set.toUpperCase()}${r.lang !== 'EN' ? ' ' + r.lang : ''}${r.foil === 'Yes' ? ' foil' : ''}${/not tournament legal/i.test(r.notes) ? ' ⚠ gold border, not legal' : ''}`).join(', ');
+    return rows.map(r => `${r.qty}× ${r.set.toUpperCase()}${r.lang !== 'EN' ? ' ' + r.lang : ''}${r.foil === 'Yes' ? ' foil' : ''}${/^wc\d{2}$/.test(r.set) ? ' ⚠ gold border, not legal' : ''}`).join(', ');
   }
   function missingList(result) {
     const fmt = ls => ls.filter(l => l.missing > 0).map(l => `${l.missing} ${l.name}`);

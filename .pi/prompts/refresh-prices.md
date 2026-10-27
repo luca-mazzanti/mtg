@@ -14,14 +14,13 @@ Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Na
    sending `-H "User-Agent: pi-mtg/1.0" -H "Accept: application/json"`, waiting ~100 ms between requests:
    - Try the card's language first: `GET https://api.scryfall.com/cards/<code>/<#>/<lang>` (lang in lowercase, e.g. `it`, `de`).
    - Use `prices.eur` for non-foil rows and `prices.eur_foil` for foil rows.
-   - If that price is null, use the English printing `GET https://api.scryfall.com/cards/<code>/<#>` and mark the price with `*`.
+   - If that price is null, use the English printing `GET https://api.scryfall.com/cards/<code>/<#>`.
    - If there is no English version (e.g. `4bb`), find the same set/number in other languages
-     (`/cards/search?q=set:<code> cn:<#> lang:any&unique=prints`), use the lowest available EUR price, prefix it with `~`,
-     and keep or update the explanation in Notes.
-   - If no price is found at all, keep the old price and add `(not refreshed)` to Notes.
+     (`/cards/search?q=set:<code> cn:<#> lang:any&unique=prints`), use the lowest available EUR price.
+   - If no price is found at all, keep the old price and list the row in your report.
    - Fetch all prices with one script (bash or python3), not one tool call per card.
 3. Update only the EUR and Price date columns (never change the Scryfall ID; if a row has none, fill it using the rule in `add-cards.md`) (Price date = `date +%Y-%m-%d`). Keep everything else unchanged,
-   except updating price figures mentioned in Notes (e.g. `Foil EN ≈ €29`) if they changed.
+   Prices are plain numbers (e.g. `1.25`), with no `*` or `~` markers; leave Notes and Bought EUR as they are.
 4. Recompute the Summary (total cards = Σ Qty, estimated EUR = Σ Qty × EUR) with `python3`, not by hand.
 
 ## Report back
