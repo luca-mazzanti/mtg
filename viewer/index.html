@@ -38,6 +38,7 @@
     <span class="spacer"></span>
     <label class="zoom" title="Gallery card size">Zoom
       <select id="zoom"><option value="120">XS</option><option value="150">S</option><option value="190">M</option><option value="250">L</option><option value="330">XL</option></select></label>
+    <button id="imagesOnly" title="Gallery: show only the card images">Images only</button>
     <button id="viewGrid" class="active">Gallery</button><button id="viewTable">Table</button>
   </div>
 </header>
@@ -54,8 +55,8 @@ const COLOR_ORDER = 'WUBRGMC';
 const MAIN_TYPES = ['Creature','Instant','Sorcery','Artifact','Enchantment','Land','Planeswalker','Battle'];
 const prefs = JSON.parse(localStorage.getItem('collection-prefs') || '{}');
 const state = { q: '', colors: new Set(), type: '', set: '', lang: '', foil: '', sort: prefs.sort || 'set', order: prefs.order || 'asc',
-  zoom: prefs.zoom || '190', view: 'grid', tableSort: null };
-const savePrefs = () => localStorage.setItem('collection-prefs', JSON.stringify({ sort: state.sort, order: state.order, zoom: state.zoom }));
+  zoom: prefs.zoom || '190', imagesOnly: !!prefs.imagesOnly, view: 'grid', tableSort: null };
+const savePrefs = () => localStorage.setItem('collection-prefs', JSON.stringify({ sort: state.sort, order: state.order, zoom: state.zoom, imagesOnly: state.imagesOnly }));
 let setRelease = new Map();   // set code -> release date (Scryfall)
 let cards = [];
 
@@ -192,9 +193,9 @@ function render() {
   const main = document.getElementById('main');
   if (!rows.length) { main.innerHTML = '<div class="empty">No cards match these filters.</div>'; return; }
   if (state.view === 'grid') {
-    main.innerHTML = `<div class="grid" style="--card-w:${state.zoom}px">` + rows.map(r => `
+    main.innerHTML = `<div class="grid${state.imagesOnly ? ' images-only' : ''}" style="--card-w:${state.zoom}px">` + rows.map(r => `
       <div class="card">
-        <a class="img" href="${r.link}" target="_blank" rel="noopener">
+        <a class="img" href="${r.link}" target="_blank" rel="noopener" title="${esc(r.name)}">
           <img loading="lazy" src="${esc(r.img)}" data-fallback="${esc(r.imgEn)}" alt="${esc(r.name)}"
                onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback}">
           <span class="badge qty">×${r.qty}</span>${r.foil === 'Yes' ? '<span class="badge foil">FOIL</span>' : ''}
@@ -253,8 +254,11 @@ function bind() {
     const c = b.dataset.c; state.colors.has(c) ? state.colors.delete(c) : state.colors.add(c);
     b.classList.toggle('active'); render();
   });
-  on('viewGrid', 'click', () => { state.view = 'grid'; viewGrid.classList.add('active'); viewTable.classList.remove('active'); render(); });
-  on('viewTable', 'click', () => { state.view = 'table'; viewTable.classList.add('active'); viewGrid.classList.remove('active'); render(); });
+  const syncImagesOnly = () => { imagesOnly.classList.toggle('active', state.imagesOnly); imagesOnly.disabled = state.view !== 'grid'; };
+  on('imagesOnly', 'click', () => { state.imagesOnly = !state.imagesOnly; savePrefs(); syncImagesOnly(); render(); });
+  syncImagesOnly();
+  on('viewGrid', 'click', () => { state.view = 'grid'; viewGrid.classList.add('active'); viewTable.classList.remove('active'); syncImagesOnly(); render(); });
+  on('viewTable', 'click', () => { state.view = 'table'; viewTable.classList.add('active'); viewGrid.classList.remove('active'); syncImagesOnly(); render(); });
 }
 
 (async () => {

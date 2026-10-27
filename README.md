@@ -60,7 +60,7 @@ files just refresh the browser. No restart is needed.
 
 - **Collection** (`/`): gallery or table of every card, with filters (search, color, type, set, language,
   foil), sorting (set release order then card number, value, price, name, color, mana value, quantity),
-  Ascending/Descending order, and a zoom for the gallery. The header shows card count, total value and the
+  Ascending/Descending order, a zoom for the gallery, and an **Images only** toggle that hides everything but the card images (quantity and foil badges stay, hover shows the name). The header shows card count, total value and the
   amount paid (copies × Bought EUR, for rows with a receipt price) for the current filters. Cards with a receipt price show "Paid €x" (and the total for the copies) under the market price; the table also has Bought and Paid columns.
 - **Check decklist**: paste a decklist to see which cards you own (and which printings), what is missing,
   and roughly what the missing cards cost.
