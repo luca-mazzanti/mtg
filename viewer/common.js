@@ -5,8 +5,11 @@ const MTG = (() => {
   const priceNum = p => { const v = parseFloat(String(p).replace(/[^0-9.]/g, '')); return isNaN(v) ? 0 : v; };
   const eur = v => '€' + v.toFixed(2);
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-  // Normalised lookup key: front face only, lowercase, unified apostrophes/accents kept.
-  const key = name => String(name).split(' // ')[0].replace(/[’`]/g, "'").trim().toLowerCase();
+  // Lowercase, accents removed (Lórien = Lorien), ligatures spelled out (Æther = aether), unified apostrophes.
+  const fold = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/æ/g, 'ae').replace(/œ/g, 'oe').replace(/[’`]/g, "'");
+  // Normalised lookup key for matching card names: front face only, folded.
+  const key = name => fold(String(name).split(' // ')[0]).trim();
   const BASICS = new Set(['plains', 'island', 'swamp', 'mountain', 'forest', 'wastes',
     'snow-covered plains', 'snow-covered island', 'snow-covered swamp', 'snow-covered mountain', 'snow-covered forest']);
 
@@ -400,6 +403,6 @@ const MTG = (() => {
     return `<nav class="top">${l('/', 'Collection', 'collection')}${l('/decks.html', 'Decks', 'decks')}</nav>`;
   }
 
-  return { esc, eur, key, imageUrl, clearCache, manaHtml, manaValue, loadSets, typeGroup, TYPE_GROUPS, priceNum, parseCollection, loadCollection, ownedIndex, parseDecklist, countCards, checkDeck,
+  return { esc, eur, key, fold, imageUrl, clearCache, manaHtml, manaValue, loadSets, typeGroup, TYPE_GROUPS, priceNum, parseCollection, loadCollection, ownedIndex, parseDecklist, countCards, checkDeck,
     scryfallInfo, resolveCardName, artUrl, renderCheck, openModal, openChecker, decks, deckFormHtml, readDeckForm, nav, bindCardHover };
 })();

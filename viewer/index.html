@@ -137,9 +137,9 @@ function fillSelect(id, values, label = v => v) {
 }
 
 function filtered() {
-  const q = state.q.toLowerCase();
+  const q = MTG.fold(state.q).trim();
   let out = cards.filter(r => {
-    if (q && !`${r.name} ${r.printed} ${r.setName} ${r.set} ${r.type} ${r.notes}`.toLowerCase().includes(q)) return false;
+    if (q && !MTG.fold(`${r.name} ${r.printed} ${r.setName} ${r.set} ${r.type} ${r.notes}`).includes(q)) return false;
     if (state.colors.size && !state.colors.has(colorKey(r.identity)) && !(state.colors.has(r.identity))) {
       // multicolor identities also match each of their component colors
       if (!(r.identity.length > 1 && [...r.identity].some(c => state.colors.has(c)))) return false;

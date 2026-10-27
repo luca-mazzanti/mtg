@@ -72,6 +72,8 @@ files just refresh the browser. No restart is needed.
 Decklist format: one card per line as `4 Card name` (`4x Card name` and MTG Arena lines like
 `4 Lightning Bolt (M11) 149` also work). A blank line, a `Sideboard` line or an `SB:` prefix starts the
 sideboard. Basic lands are not tracked and always count as owned.
+Card names ignore case and accents (`Lorien Revealed` = `Lórien Revealed`), both in the decklist
+matcher and in the collection search.
 
 Images load directly from Scryfall using the Scryfall ID column, so the collection page makes no Scryfall
 API calls. Deck lookups (mana cost, type, price) are cached in the browser for a day. Use **Clear Scryfall

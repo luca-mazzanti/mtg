@@ -27,7 +27,7 @@ Do it in one `python3` script, using the same rules as the viewer (`viewer/commo
 - Read the Cards table. Columns, in order:
   `| Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Notes | Scryfall ID |`
 - Owned copies of a card = sum of Qty over **all** rows with that English Name (any printing, language or foil).
-- Match names case-insensitively, front face only (text before ` // `), with `’` normalised to `'`.
+- Match names case-insensitively and accent-insensitively (`Lórien` = `Lorien`, `Æ` = `ae`), front face only (text before ` // `), with `’` normalised to `'`.
 - Basic lands (Plains, Island, Swamp, Mountain, Forest, Wastes, and Snow-Covered versions) are not tracked: count them as owned.
 - Owned copies are shared between main deck and sideboard: serve the main deck first, then the sideboard with what's left.
   So a card in both (e.g. 2 main + 1 side, 2 owned) is missing 1, in the sideboard.
