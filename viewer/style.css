@@ -159,7 +159,7 @@ label.zoom { color: var(--muted); font-size: 13px; display: flex; gap: 6px; alig
 .tile.miss .pic { outline: 2px solid var(--R); }
 .tile .own { color: var(--R); font-size: 11px; }
 .q { position: absolute; bottom: 5px; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #111; }
-.q.a { left: 5px; } .q.b { right: 5px; } .q.only { left: 50%; transform: translateX(-50%); }
+.q.a { left: 5px; } .q.b { right: 5px; } .q.only { left: 50%; right: auto; transform: translateX(-50%); }
 .q.diff { box-shadow: 0 0 0 2px #fff; }
 .cmp-list { list-style: none; margin: 0; padding: 0; }
 .cmp-list li { display: flex; gap: 6px; align-items: center; padding: 3px 0; border-bottom: 1px solid var(--border); }
