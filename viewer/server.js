@@ -11,10 +11,10 @@ const DECKS_DIR = path.join(ROOT, 'decks');
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '127.0.0.1'; // local only
 
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 const STATIC = {
   '/': 'index.html', '/index.html': 'index.html', '/decks.html': 'decks.html', '/deck.html': 'deck.html', '/compare.html': 'compare.html',
-  '/common.js': 'common.js', '/style.css': 'style.css',
+  '/common.js': 'common.js', '/favicon.svg': 'favicon.svg', '/style.css': 'style.css',
 };
 
 // ---------- decks storage ----------
