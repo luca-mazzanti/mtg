@@ -11,15 +11,14 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 - **Foil**: Yes / No
 - **EUR**: Scryfall price per copy; `*` = price of the English version of the same printing (Scryfall has no price for that language)
 - **Price date**: when the price was taken
-- **Set / Code / #**: Scryfall's, except for rows bought on CardTrader whose printing CardTrader numbers differently, which follow the CardTrader receipt so they match it (`cdmr`, `cneo`, `fdns`, `drk2`, and the Rinascimento lands #58/#62/#66). For those the Scryfall ID is the authority for image and price
-- **Bought EUR**: what I paid per copy, from the CardTrader order receipts, same format as EUR. When one row was bought in several lines at different prices it is the average per copy. Empty when the row has no matching receipt line
+- **Bought EUR**: what I paid per copy, from the CardTrader order receipts, same format as EUR. When one row was bought in several lines at different prices it is the average per copy. Empty when the row has no matching receipt line. Set, Code and # always follow Scryfall. When matching receipts, CardTrader's own codes are mapped to Scryfall's: `cdmr 316` = `dmr 316`, `cneo 334/342` = `neo 334/342`, `fdns 718` = `fdn 718`, `drk2 5` = `drk 5`, and Rinascimento `rin 58/62/66` = `rin 175/179/183`
 - **Scryfall ID**: the exact Scryfall printing, used for images and links. For non-English rows it is the localized printing when Scryfall has a scan of it, otherwise the English printing
 
 ## Cards
 
 | Qty | Printed Name | English Name | Color | Identity | Type | Mana | Set | Code | # | Lang | Foil | EUR | Price date | Bought EUR | Notes | Scryfall ID |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2 | Chain Lightning | Chain Lightning | R | R | Sorcery | {R} | Dominaria Remastered Collectors | cdmr | 316 | EN | No | 0.39 | 2026-10-25 | 0.77 | Retro frame | e4dfc299-0cf5-40ab-9f50-11408ff82282 |
+| 2 | Chain Lightning | Chain Lightning | R | R | Sorcery | {R} | Dominaria Remastered | dmr | 316 | EN | No | 0.39 | 2026-10-25 | 0.77 | Retro frame | e4dfc299-0cf5-40ab-9f50-11408ff82282 |
 | 2 | Antico Rancore | Ancient Grudge | R | RG | Instant | {1}{R} | Innistrad | isd | 127 | IT | No | 0.25* | 2026-10-25 | 0.24 | | e5e7b966-7c5b-44e6-a6df-4bd7af4edaa9 |
 | 1 | Bauchschuss | Gut Shot | R | R | Instant | {R/P} | New Phyrexia | nph | 86 | DE | No | 5.24* | 2026-10-25 | | Foil EN ≈ €29 | ad582629-4985-411b-999d-2eb3d14bbba8 |
 | 3 | Colpo di Budella | Gut Shot | R | R | Instant | {R/P} | New Phyrexia | nph | 86 | IT | No | 5.24* | 2026-10-25 | | Foil EN ≈ €29 | a54a2a30-b96a-49c7-9151-1f4b0d4a4413 |
@@ -82,7 +81,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Troll of Khazad-dûm | Troll of Khazad-dûm | B | B | Creature | {5}{B} | The Lord of the Rings: Tales of Middle-earth | ltr | 111 | EN | No | 1.03 | 2026-10-25 | 1.45 | | a6539e26-b63b-4725-9407-caaf451de084 |
 | 4 | Thorn of the Black Rose | Thorn of the Black Rose | B | B | Creature | {3}{B} | Commander Legends | cmr | 154 | EN | No | 0.28 | 2026-10-25 | 0.34 | | 2b7538ad-cc41-4229-8a39-c1db21f2899a |
 | 4 | Gixian Infiltrator | Gixian Infiltrator | B | B | Creature | {1}{B} | The Brothers' War | bro | 98 | EN | No | 0.45 | 2026-10-25 | 1.31 | | c94a3317-7d1f-4f29-8353-180f1ab48d18 |
-| 4 | Mukotai Ambusher | Mukotai Ambusher | B | B | Artifact Creature | {3}{B} | Kamigawa: Neon Dynasty Collectors | cneo | 342 | EN | No | 0.10 | 2026-10-25 | 0.19 | Showcase ninja frame | 357594c7-a9a6-468d-b262-e5f7d5e35f54 |
+| 4 | Mukotai Ambusher | Mukotai Ambusher | B | B | Artifact Creature | {3}{B} | Kamigawa: Neon Dynasty | neo | 342 | EN | No | 0.10 | 2026-10-25 | 0.19 | Showcase ninja frame | 357594c7-a9a6-468d-b262-e5f7d5e35f54 |
 | 4 | Rana Pescatrice di Gurmag | Gurmag Angler | B | B | Creature | {6}{B} | Fate Reforged | frf | 72 | IT | No | 0.21* | 2026-10-25 | 0.32 | | c60a8cf1-a8c7-4f45-bbd3-188fab2652f9 |
 | 2 | Zanne Inaspettate | Unexpected Fangs | B | B | Instant | {1}{B} | Ikoria: Lair of Behemoths | iko | 102 | IT | No | 0.59* | 2026-10-25 | 1.15 | | aa6494ad-a35e-4b09-8623-7740f3c20b0b |
 | 2 | Unexpected Fangs | Unexpected Fangs | B | B | Instant | {1}{B} | Ikoria: Lair of Behemoths | iko | 102 | EN | No | 0.59 | 2026-10-25 | 1.21 | | aa6494ad-a35e-4b09-8623-7740f3c20b0b |
@@ -113,7 +112,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 1 | Auramancer | Auramancer | W | W | Creature | {2}{W} | Odyssey | ody | 5 | EN | No | 0.34 | 2026-10-25 | | Foil EN ≈ €6 | 090dd4cf-5087-4ed8-a944-f3794e5862d5 |
 | 4 | Pescatrice Volante Kor | Kor Skyfisher | W | W | Creature | {1}{W} | Zendikar | zen | 23 | IT | No | 1.18* | 2026-10-25 | 1.00 | Foil EN ≈ €7 | bb2e9465-f5ba-4c7b-9f03-d40dc8394acd |
 | 1 | Kor Skyfisher | Kor Skyfisher | W | W | Creature | {1}{W} | URL/Convention Promos | purl | 23 | EN | Yes | 6.04 | 2026-10-25 | | "MAGIC" watermark promo (MTG 2010); Scryfall lists it as foil-only | cffc6114-aa99-4c56-80fc-92fb32639d13 |
-| 1 | Polvere alla Polvere | Dust to Dust | W | W | Sorcery | {1}{W}{W} | The Dark Italian | drk2 | 5 | IT | No | 19.11* | 2026-10-27 | 15.71 | | c44ac146-dbeb-486d-b96a-d43b421be72a |
+| 1 | Polvere alla Polvere | Dust to Dust | W | W | Sorcery | {1}{W}{W} | The Dark | drk | 5 | IT | No | 19.11* | 2026-10-27 | 15.71 | | c44ac146-dbeb-486d-b96a-d43b421be72a |
 | 4 | Return to Dust | Return to Dust | W | W | Instant | {2}{W}{W} | The Lost Caverns of Ixalan Commander | lcc | 136 | EN | No | 0.18 | 2026-10-25 | 0.17 | | 664e3826-799b-4edb-8811-2d2b6355edaf |
 | 2 | Coalition Honor Guard | Coalition Honor Guard | W | W | Creature | {3}{W} | Apocalypse | apc | 3 | EN | No | 0.32 | 2026-10-25 | 0.26 | Foil EN ≈ €5 | c5b7be3e-b4af-46d4-bcc6-b44c651f2012 |
 | 4 | Angelo di Serra | Serra Angel | W | W | Creature | {3}{W}{W} | Magic 2011 | m11 | 27 | IT | No | 0.05* | 2026-10-25 | 0.13 | | 3c53890f-8cf2-42ad-8b5f-66badc99630c |
@@ -165,7 +164,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Serpe Meccanivora | Gearseeker Serpent | U | U | Creature | {5}{U}{U} | Kaladesh | kld | 48 | IT | No | 0.19* | 2026-10-25 | 0.17 | | d32d8327-6ec2-4d43-b254-b04407612715 |
 | 3 | Ninja della Notte Fonda | Ninja of the Deep Hours | U | U | Creature | {3}{U} | Betrayers of Kamigawa | bok | 44 | IT | No | 1.52* | 2026-10-25 | | 44/165; Foil EN ≈ €14 | 367a67c7-54db-4336-b55a-3fa27625172a |
 | 1 | Ninja of the Deep Hours | Ninja of the Deep Hours | U | U | Creature | {3}{U} | Betrayers of Kamigawa | bok | 44 | EN | No | 1.52 | 2026-10-25 | 1.52 | Foil EN ≈ €14 | 367a67c7-54db-4336-b55a-3fa27625172a |
-| 4 | Moon-Circuit Hacker | Moon-Circuit Hacker | U | U | Enchantment Creature | {1}{U} | Kamigawa: Neon Dynasty Collectors | cneo | 334 | EN | No | 0.32 | 2026-10-25 | 0.38 | showcase (SS39 art) | 75c43923-7280-4ccb-810b-e8c38dd8a26f |
+| 4 | Moon-Circuit Hacker | Moon-Circuit Hacker | U | U | Enchantment Creature | {1}{U} | Kamigawa: Neon Dynasty | neo | 334 | EN | No | 0.32 | 2026-10-25 | 0.38 | showcase (SS39 art) | 75c43923-7280-4ccb-810b-e8c38dd8a26f |
 | 1 | Mulldrifter | Mulldrifter | U | U | Creature | {4}{U} | Lorwyn | lrw | 76 | EN | No | 0.40 | 2026-10-25 | | 76/301; holo dot is the green sleeve | a97cfefa-ade7-49f6-b2aa-1118b9db4935 |
 | 1 | Pulce Fastidiosa | Pestermite | U | U | Creature | {2}{U} | Lorwyn | lrw | 78 | IT | Yes | 3.06* | 2026-10-25 | | foil judged from strong sheen across whole card (no star on 2007 cards); confirm | f252ae53-443c-4a27-b8f0-639a9a2b8598 |
 | 1 | Pulce Fastidiosa | Pestermite | U | U | Creature | {2}{U} | Lorwyn | lrw | 78 | IT | No | 0.31* | 2026-10-25 | | | f252ae53-443c-4a27-b8f0-639a9a2b8598 |
@@ -198,9 +197,9 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 3 | Ponderare | Ponder | U | U | Sorcery | {U} | Magic 2012 | m12 | 73 | IT | No | 2.10* | 2026-10-25 | | Foil EN ≈ €19 | 81c908ee-e70a-4406-a32d-ab5ab17e67b1 |
 | 1 | Ponder | Ponder | U | U | Sorcery | {U} | Commander 2018 | c18 | 96 | EN | No | 2.87 | 2026-10-25 | 1.85 | | 91382955-bcfc-4fb6-8cce-dc107e5b4c32 |
 | 4 | Considerare Inferiore | Deem Inferior | U | U | Sorcery | {3}{U} | Modern Horizons 3 | mh3 | 57 | IT | No | 0.19* | 2026-10-25 | 0.29 | | cc0835c7-58ca-4f16-984a-c590ce6a229a |
-| 4 | Torre di Urza | Urza's Tower | C | C | Land | | Rinascimento | rin | 66 | IT | No | 1.54 | 2026-10-25 | 2.53 | Rinascimento, sunset/shore art (Mark Poole) | a0240c3c-7219-4d5d-ac85-c369e4b180eb |
-| 4 | Centrale Energetica di Urza | Urza's Power Plant | C | C | Land | | Rinascimento | rin | 62 | IT | No | 1.46 | 2026-10-25 | 2.57 | Rinascimento, red columns art (Mark Tedin) | 00fe59e8-d1ab-4f74-a7f4-a8feca3705ee |
-| 4 | Miniera di Urza | Urza's Mine | C | C | Land | | Rinascimento | rin | 58 | IT | No | 1.63 | 2026-10-25 | 1.97 | Rinascimento, sphere-with-claws art (Anson Maddocks) | f0b8934e-9ff0-4c3e-987e-9c4fb1445b77 |
+| 4 | Torre di Urza | Urza's Tower | C | C | Land | | Rinascimento | rin | 183 | IT | No | 1.54 | 2026-10-25 | 2.53 | Rinascimento, sunset/shore art (Mark Poole) | a0240c3c-7219-4d5d-ac85-c369e4b180eb |
+| 4 | Centrale Energetica di Urza | Urza's Power Plant | C | C | Land | | Rinascimento | rin | 179 | IT | No | 1.46 | 2026-10-25 | 2.57 | Rinascimento, red columns art (Mark Tedin) | 00fe59e8-d1ab-4f74-a7f4-a8feca3705ee |
+| 4 | Miniera di Urza | Urza's Mine | C | C | Land | | Rinascimento | rin | 175 | IT | No | 1.63 | 2026-10-25 | 1.97 | Rinascimento, sphere-with-claws art (Anson Maddocks) | f0b8934e-9ff0-4c3e-987e-9c4fb1445b77 |
 | 1 | Giardino di Khalni | Khalni Garden | C | G | Land | | Worldwake | wwk | 138 | IT | No | 1.81* | 2026-10-25 | | only card on page; WWK symbol; Foil EN ≈ €21 | 1cc6a5e6-0b73-4488-8954-4b168ce7106d |
 | 4 | Vault of Whispers | Vault of Whispers | C | B | Artifact Land | | World Championship Decks 2004 | wc04 | ap286 | EN | No | 2.07 | 2026-10-25 | | World Championship 2004 gold border, Paquette signature (not tournament legal) | ac4328fb-8060-4e1d-bf2a-a174bbd7b6aa |
 | 3 | Great Furnace | Great Furnace | C | R | Artifact Land | | Edge of Eternities Commander | eoc | 161 | EN | No | 2.51 | 2026-10-25 | 2.52 | | 74c5bb44-d72c-4c1a-a38f-86b4a8f49ae1 |
@@ -214,7 +213,7 @@ Card data and prices from [Scryfall](https://scryfall.com/docs/api).
 | 4 | Boulderbranch Golem | Boulderbranch Golem | C | G | Artifact Creature | {7} | The Brothers' War | bro | 197 | EN | No | 0.44 | 2026-10-25 | 2.39 | | 6e6e5338-9b95-4ac7-a57c-5efaa6423531 |
 | 2 | Priest of Titania | Priest of Titania | G | G | Creature | {1}{G} | Urza's Saga | usg | 270 | EN | No | 2.39 | 2026-10-25 | 2.49 | | 965c33c3-0c68-4516-b8b0-5a0552ed44b6 |
 | 3 | Weather the Storm | Weather the Storm | G | G | Instant | {1}{G} | Modern Horizons | mh1 | 191 | EN | No | 1.62 | 2026-10-25 | 1.52 | Foil EN ≈ €6 | f6a9fa51-78c3-42e6-8c2e-39658f59ed87 |
-| 4 | Gigantosaurus | Gigantosaurus | G | G | Creature | {G}{G}{G}{G}{G} | Foundations: Starter Collection | fdns | 718 | EN | Yes | 1.72 | 2026-10-25 | 1.18 | Starter Collection printing, foil-only on Scryfall; Set is foil-only | bc1c518a-dcb4-407c-85be-ed5935a24198 |
+| 4 | Gigantosaurus | Gigantosaurus | G | G | Creature | {G}{G}{G}{G}{G} | Foundations | fdn | 718 | EN | Yes | 1.72 | 2026-10-25 | 1.18 | Starter Collection printing, foil-only on Scryfall; Set is foil-only | bc1c518a-dcb4-407c-85be-ed5935a24198 |
 | 1 | Annoyed Altisaur | Annoyed Altisaur | G | G | Creature | {5}{G}{G} | Modern Horizons 3 | mh3 | 284 | EN | No | 0.14 | 2026-10-25 | | | 4aa9354d-3496-47f4-81c9-aead15efb8bb |
 | 4 | Battito di Murasa | Pulse of Murasa | G | G | Instant | {2}{G} | Oath of the Gatewatch | ogw | 141 | IT | No | 0.19* | 2026-10-25 | 0.29 | | c0c8057f-b45b-4f67-90cd-c808b5e9cbfa |
 | 4 | Nyxborn Hydra | Nyxborn Hydra | G | G | Enchantment Creature | {X}{G} | Modern Horizons 3 | mh3 | 164 | EN | No | 0.39 | 2026-10-25 | 0.53 | | 902a969e-9f22-4e92-93eb-9d4536ca82e5 |
