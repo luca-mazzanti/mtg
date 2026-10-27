@@ -1,0 +1,60 @@
+# Mono Red Madness | 15.6% | 137
+M Sneaky Snacker:4,Fiery Temper:3.9,Lava Dart:3.8,Lightning Bolt:3.7,Guttersnipe:3.3,Fireblast:3.3,Grab the Prize:3.9,Highway Robbery:4,Faithless Looting:3.2,Kessig Flamebreather:3.7,Voldaren Epicure:3.9,Melded Moxite:2.5,Vision of Love:1.7,Witch's Mark:1.1,Sazacap's Brew:1.4
+S Pyroblast:3.5,Relic of Progenitus:2.7,Smash to Smithereens:2.7,Red Elemental Blast:2.1,End the Festivities:2,Searing Blaze:2.1,Cast into the Fire:2.7,Cleansing Wildfire:2.8,Campfire:2.1,Suplex:1.7,Electrickery:2.3,Crimson Fleet Commodore:1.1,Gorilla Shaman:1.4,Molten Rain:3.5,Faerie Macabre:1
+# Mono Blue Terror | 9.0% | 79
+M Counterspell:4,Lórien Revealed:4,Thought Scour:4,Mental Note:3.9,Brainstorm:3.7,Tolarian Terror:3.7,Sleep of the Dead:2,Cryptic Serpent:4,Ponder:3.2,Deem Inferior:2.9,Deep Analysis:1.1,Murmuring Mystic:1.8,Dispel:2.2,Delver of Secrets:3.8,Force Spike:3
+S Hydroblast:3.2,Annul:3.2,Gut Shot:2.8,Blue Elemental Blast:2.3,Steel Sabotage:2.2,Envelop:1.2,Murmuring Mystic:1.2,Dispel:1.9,Spreading Seas:3.4,Azure Fleet Admiral:1,Dragon Wings:1
+# Dimir Faeries | 8.9% | 78
+M Lórien Revealed:4,Counterspell:4,Spellstutter Sprite:3.8,Cast Down:2.5,Snuff Out:4,Ninja of the Deep Hours:2.2,Faerie Seer:3.3,Thorn of the Black Rose:1.9,Bojuka Bog:1.3,Brainstorm:3.6,Contaminated Aquifer:4,Augur of Bolas:2.9,Dispel:1.8,Extract a Confession:1,Baleful Strix:3.4
+S Arms of Hadar:1.2,Blue Elemental Blast:2.9,Hydroblast:2.3,Annul:3.1,Relic of Progenitus:2,Campfire:1.1,Okiba-Gang Shinobi:1,Mukotai Ambusher:1.1,Murmuring Mystic:1,Extract a Confession:1,Steel Sabotage:2.4,Dispel:1.1,Duress:1,Unexpected Fangs:1,Viridian Longbow:1
+# Grixis Affinity | 7.1% | 62
+M Myr Enforcer:4,Thoughtcast:4,Utrom Monitor:3.5,Seat of the Synod:2.9,Refurbished Familiar:4,Mistvault Bridge:3.7,Vault of Whispers:3.7,Silverbluff Bridge:2.1,Blood Fountain:2.1,Reckoner's Bargain:4,Nihil Spellbomb:2.2,Drossforge Bridge:3.4,Galvanic Blast:4,Great Furnace:2.3,Makeshift Munitions:1
+S Hydroblast:3.1,Extract a Confession:2.3,Blue Elemental Blast:2.1,Pyroblast:3.7,Krark-Clan Shaman:1.2,Red Elemental Blast:1.2,Unexpected Fangs:1,Nihil Spellbomb:1.4,Envelop:2.1,Dust to Dust:3.7,Metallic Rebuke:3.3,Arms of Hadar:1.9,Duress:2.7,Thraben Charm:3.6,Annul:2
+# Bogles | 5.4% | 47
+M Ethereal Armor:4,Gladecover Scout:4,Slippery Bogle:4,Malevolent Rumble:4,Abundant Growth:4,Ancestral Mask:3.9,Rancor:3.6,Armadillo Cloak:3.3,Silhana Ledgewalker:3,Utopia Sprawl:3.9,Cartouche of Solidarity:1.1,Sentinel's Eyes:1,Ash Barrens:1.9,Lifelink:1,Kruphix's Insight:1.2
+S Spirit Link:2.6,Flaring Pain:1.9,Standard Bearer:2.1,Mask of Law and Grace:2.8,Ram Through:1.9,Scattershot Archer:2.9,Faerie Macabre:2.2,Red Elemental Blast:2.3,Benevolent Blessing:1.3,Thraben Charm:1.8,Breath Weapon:1.4,Moldervine Cloak:1.4,Bannerhide Krushok:1.5,Fiery Cannonade:1.3,Fling:1
+# Elves | 4.7% | 41
+M Priest of Titania:3.9,Quirion Ranger:3.9,Winding Way:4,Lead the Stampede:3.9,Generous Ent:4,Nyxborn Hydra:3.9,Timberwatch Elf:3.8,Llanowar Elves:2.9,Masked Vandal:4,Gingerbread Cabin:1,Avenging Hunter:3.8,Elvish Mystic:2.9,Fyndhorn Elves:2.8,Sagu Wildling:2.3,Land Grant:2.1
+S Faerie Macabre:2.8,Monstrous Emergence:3.8,Vitu-Ghazi Inspector:2.9,Spinewoods Paladin:3.2,Scattershot Archer:2.7,Mwonvuli Acid-Moss:3.4,Deglamer:2.2,Nylea's Disciple:3.1,Gleeful Sabotage:3.2,Lignify:2.7,Masked Vandal:3.2,Pulse of Murasa:1.4,Primordial Pachyderm:3.4,Gnaw to the Bone:2.4,Rooftop Percher:1.1
+# Ruby Storm | 3.6% | 32
+M Glimpse the Impossible:4,Goblin Anarchomancer:4,Hickory Woodlot:4,Sandstone Needle:4,Seething Song:4,Thornscape Familiar:4,Manamorphose:3.9,First Day of Class:2.4,Seize the Storm:2,Geothermal Crevice:3.9,Desperate Ritual:3.5,Crossover Collaboration:3.2,Reckless Impulse:2.7,Wrenn's Resolve:3.8,Twinned Vision:3.9
+S Origin of Metalbending:1,Weather the Storm:2.6,Pyroblast:3.9,Flaring Pain:1,Red Elemental Blast:2.2,Gruul Turf:2.1,Abandon Attachments:1.1,Firebending Lesson:1,Waterbending Lesson:1,It'll Quench Ya!:1,Bestial Incursion:1.8,Gut Shot:2,Writhing Chrysalis:4,Avenging Hunter:3,Guttersnipe:3
+# Mono Red Rally | 3.5% | 31
+M Goblin Bushwhacker:4,Goblin Tomb Raider:4,Great Furnace:4,Rally at the Hornburg:4,Voldaren Epicure:4,Clockwork Percussionist:4,Lightning Bolt:3.4,Burning-Tree Emissary:4,Galvanic Blast:4,Chain Lightning:2.1,Experimental Synthesizer:3,Reckless Impulse:3.2,End the Festivities:1.5,Wrenn's Resolve:3.1,Inventor's Axe:3.6
+S Cast into the Fire:3.1,Relic of Progenitus:2.9,Red Elemental Blast:3.2,End the Festivities:1.8,Pyroblast:2.4,Searing Blaze:1.3,Smash to Smithereens:2.2,Raze:2.7,Gorilla Shaman:1.3,Flash of Defiance:1.5,Suplex:2.4,Flaring Pain:1.3,Tormod's Crypt:2.8,Tectonic Hazard:2.5,Wrenn's Resolve:2
+# Jund Wildfire | 3.4% | 30
+M Cleansing Wildfire:4,Drossforge Bridge:4,Refurbished Familiar:4,Vault of Whispers:1.9,Lembas:2.4,Nihil Spellbomb:3.4,Eviscerator's Insight:2.1,Writhing Chrysalis:4,Ichor Wellspring:3.1,Slagwoods Bridge:4,Twisted Landscape:3.9,Cast Down:3.8,Makeshift Munitions:1,Fanatical Offering:3.5,Krark-Clan Shaman:2.9
+S Duress:2.9,Troublemaker Ouphe:2.4,Weather the Storm:3.7,Pyroblast:1.6,Breath Weapon:2.4,Nihil Spellbomb:1.3,Faerie Macabre:1.2,Ancient Grudge:1.2,Red Elemental Blast:2.5,Krark-Clan Shaman:1.5,Cast into the Fire:2.6,Campfire:1,Toxin Analysis:1.2,Terminate:1,Dust to Dust:2.9
+# Gruul Ramp | 3.2% | 28
+M Writhing Chrysalis:4,Malevolent Rumble:3,Bonder's Ornament:1.9,Arbor Elf:3.9,Utopia Sprawl:3.7,Avenging Hunter:3.1,Wild Growth:2.6,Boarding Party:4,Eldrazi Repurposer:3,Annoyed Altisaur:2.9,Generous Ent:1.9,Mwonvuli Acid-Moss:4,Thermokarst:4,Structural Distortion:1.9,Wooded Ridgeline:1.1
+S Breath Weapon:2.8,Relic of Progenitus:2.7,Weather the Storm:3.1,Deglamer:2.9,Suplex:2.5,Cast into the Fire:1.7,Blue Elemental Blast:2.5,Hydroblast:3.2,Ancient Grudge:1.6,Fiery Cannonade:1.7,Faerie Macabre:2.6,Pyroblast:2.3,Vandalblast:3,Coalition Honor Guard:2,Pulse of Murasa:1.3
+# Spy Combo | 3.2% | 28
+M Generous Ent:4,Land Grant:4,Lead the Stampede:4,Overgrown Battlement:4,Saruli Caretaker:4,Balustrade Spy:3.9,Sagu Wildling:3.8,Masked Vandal:3.6,Wall of Roots:3.1,Dread Return:2,Lotleth Giant:2,Winding Way:4,Gatecreeper Vine:2.6,Mesmeric Fiend:2.8,Quirion Ranger:2
+S Faerie Macabre:2,Flaring Pain:1,Mesmeric Fiend:1.4,Vitu-Ghazi Inspector:2.2,Jack-o'-Lantern:1,Nylea's Disciple:3,Scattershot Archer:2.1,Masked Vandal:1,Healer of the Glade:3.2,Gorilla Shaman:1.7,Writhing Chrysalis:3.6,Avenging Hunter:2.2,Undergrowth Leopard:1.7,Nyxborn Hydra:1.1,Fang Dragon:1.9
+# Golgari Gardens | 3.1% | 27
+M Fanatical Offering:4,Eviscerator's Insight:4,Ichor Wellspring:4,Khalni Garden:3.9,Cast Down:3,Nihil Spellbomb:3,Lembas:2.3,Crypt Rats:2.9,Campfire:1.9,Bojuka Bog:1.9,Troll of Khazad-dûm:3,Tithing Blade:2.1,Haunted Mire:1,Defile:3.1,Snuff Out:1
+S Weather the Storm:3.9,Troublemaker Ouphe:3,Duress:2.6,Faerie Macabre:1.7,Drown in Sorrow:1.7,Avenging Hunter:1,Rancid Earth:3.2,Bojuka Bog:1.1,Nihil Spellbomb:1,Relic of Progenitus:2,Desert:1,Pyroblast:3.5,Thorn of the Black Rose:1,Hydroblast:4,Blue Elemental Blast:2
+# Esper Bounce | 3.1% | 27
+M God-Pharaoh's Faithful:4,Snap:4,Sunscape Familiar:4,Mulldrifter:3.9,Azorius Chancery:3.6,Archaeomancer:2.9,Ephemerate:2.6,Lórien Revealed:3.9,Preordain:3.9,Ghostly Flicker:1.1,Negate:2.4,Mortuary Mire:1,Murmuring Mystic:1.7,Contaminated Landscape:2.8,Idyllic Beachfront:1
+S Hydroblast:3.4,Stonehorn Dignitary:1.8,Last Breath:1.8,Thraben Charm:1.4,Negate:1.3,Goliath Paladin:1,Dust to Dust:3.1,Deep Analysis:1.3,Blue Elemental Blast:1.9,Remove Soul:1.9,Envelop:1.7,Murmuring Mystic:1,Vandalblast:2.6,Dispel:1.9,Pyroblast:3
+# UG Fog | 2.1% | 18
+M Lórien Revealed:4,Moment's Peace:4,Simic Growth Chamber:4,Weather the Storm:4,Behold the Multiverse:3.8,Arcane Denial:3.6,Tangle:3.3,Stream of Thought:2,Tangled Islet:1.4,Fog:1.3,Growth Spiral:3.7,Plunder the Trollshaws:3.5,Bojuka Bog:1.4,Embrace the Paradox:2.9,Desert:2.8
+S Hydroblast:4,Blue Elemental Blast:3.2,Faerie Macabre:2.5,Dispel:2.1,Stream of Thought:1,Murmuring Mystic:2.3,Heritage Reclamation:1,Bojuka Bog:1,Relic of Progenitus:3.5,Desert:1,Envelop:1,Steel Sabotage:1,Campfire:1.7,Faerie Trickery:1.3,Spider-Man No More:3
+# Familiars | 2.1% | 18
+M Glint Hawk:4,Refurbished Familiar:3.9,Cryogen Relic:3.9,Seat of the Synod:3.8,Thoughtcast:3.7,Vault of Whispers:3.6,Ancient Den:3.2,Razortide Bridge:2.7,Blood Fountain:1.6,Mistvault Bridge:3.4,Giant's Boulder:3.5,Utrom Monitor:3.2,Dispatch:3.9,Kor Skyfisher:2.7,Baleful Strix:3.5
+S Dust to Dust:2.6,Blue Elemental Blast:2.6,Hydroblast:2.1,Arms of Hadar:1.9,Envelop:2.2,Nihil Spellbomb:1.8,Duress:2.2,Extract a Confession:2,Campfire:2,Thraben Charm:1.3,Pyroblast:3.3,Krark-Clan Shaman:2.4,Tithing Blade:1.9,Breath Weapon:1,Navigator's Compass:2.3
+# Boros Moxite | 1.6% | 14
+M Kor Skyfisher:3.9,Sneaky Snacker:4,Lightning Bolt:3.7,Pursue the Past:3.2,Great Furnace:2.9,Ancient Den:2.7,Glint Hawk:3.9,Galvanic Blast:3.3,Boros Garrison:1.7,Prismatic Strands:1.6,Ragged Short Spear:3.6,Kabira Crossroads:1.5,Thraben Inspector:3.8,Lembas:3.1,Melded Moxite:4
+S Red Elemental Blast:3.5,Dust to Dust:2.3,Pyroblast:2,Thraben Charm:1.8,Dawnbringer Cleric:1.7,Soul-Guide Lantern:1.7,Electrickery:1.4,Vulshok Sorcerer:2.2,Relic of Progenitus:1.5,Return to Dust:1.5,Cast into the Fire:2.4,Gorilla Shaman:2.5,Destroy Evil:1.3,Cleansing Wildfire:2.7,Kor Sanctifiers:2.7
+# Monster Tron | 1.4% | 12
+M Urza's Power Plant:4,Urza's Tower:4,Urza's Mine:3.9,Bramble Wurm:3.8,Expedition Map:3.5,Crop Rotation:2.8,Bonder's Ornament:2.5,Generous Ent:2.2,Barrels of Blasting Jelly:3,Ancient Stirrings:4,Unfathomable Truths:3.1,Pinnacle Kill-Ship:4,Maelstrom Colossus:3.8,Bojuka Bog:1,Haunted Fengraf:1
+S Breath Weapon:3.1,Relic of Progenitus:3,Call Damage Control:1.9,Scour from Existence:2.1,Hydroblast:2.8,Earth Rift:2.6,Bojuka Bog:1.1,Kaervek's Torch:1,Blue Elemental Blast:2.9,Whispersilk Cloak:1,Rooftop Percher:2.5,Swirling Sandstorm:2.4,Pulse of Murasa:1,Pyroblast:2.1,Tangle:2
+# Rakdos Madness | 1.0% | 9
+M Alms of the Vein:4,Faithless Looting:4,Lightning Bolt:4,Fiery Temper:3.9,Kitchen Imp:4,Voldaren Epicure:4,Jagged Barrens:3.7,Vampire's Kiss:3.7,Sneaky Snacker:4,Grab the Prize:3.7,Highway Robbery:4,Razortrap Gorge:2.1,Bojuka Bog:1,Rakdos Carnarium:1.4,Bloodfell Caves:2
+S Nihil Spellbomb:3.2,Extract a Confession:2.7,Duress:2.3,Dark Withering:2.3,Smash to Smithereens:2.9,End the Festivities:1.6,Cast into the Fire:2.3,Electrickery:3,Breath Weapon:1.8,Pyroblast:2.8,Red Elemental Blast:2,Suplex:2,Faerie Macabre:1,Diabolic Edict:3,Fiery Cannonade:2
+# White Weenie | 0.8% | 7
+M Thraben Inspector:4,Novice Inspector:3.9,Leonardo; Big Brother:3.2,Thraben Charm:3.9,Battle Screech:4,Lunarch Veteran:4,Prismatic Strands:3.4,Raffine's Informant:4,Kor Skyfisher:3.9,Guardians' Pledge:2.6,Idyllic Grange:2.6,Spider-Man; Web-Slinger:1.3,Ramosian Rally:1.8,Journey to Nowhere:2.6,Elite Interceptor:1.4
+S Dust to Dust:3.8,Martyr of Sands:3.8,Standard Bearer:2.7,Journey to Nowhere:2.6,Holy Light:1.8,Revoke Existence:1.6,Hallow:2.2,Relic of Progenitus:3,Thraben Charm:2.8,Sunlance:1.9,Destroy Evil:1.1,Palace Sentinels:1.2,Ramosian Rally:1,Ultimate Alliance:3.3,Mana Tithe:1.3
+# Altar Food Combo | 0.7% | 6
+M Fanatical Offering:4,Khalni Garden:4,Lembas:4,Nutrient Block:4,Cast Down:3.3,Campfire:3,Cauldron Familiar:3,Eviscerator's Insight:3,Pestilence:3,Troll of Khazad-dûm:2.9,Bojuka Bog:2,Golgari Rot Farm:2,Nihil Spellbomb:2,Tithing Blade:2,Ichor Wellspring:1.9
+S Weather the Storm:4,Drown in Sorrow:2.6,Troublemaker Ouphe:2.2,Faerie Macabre:2,Snuff Out:1.4,Moment's Peace:1,Diabolic Edict:1,Tragic Slip:1,Desert:2,Duress:2,Suffocating Fumes:1,Tithing Blade:1

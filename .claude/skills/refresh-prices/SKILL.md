@@ -1,11 +1,12 @@
 ---
+name: refresh-prices
 description: Refresh EUR prices in my MTG collection from Scryfall
 argument-hint: "[card name filter]"
 ---
 Refresh the prices in my Magic: The Gathering collection file.
 
-Collection file: `mtg-collection.md` in the project root (the folder containing `.pi/`).
-Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Name or English Name contains it (case-insensitive).
+Collection file: `mtg-collection.md` in the project root (the repo root).
+Filter: $ARGUMENTS (empty = all rows). If a filter is given, only refresh rows whose Printed Name or English Name contains it (case-insensitive).
 
 ## Steps
 1. Read the Cards table. Columns, in order:
@@ -18,10 +19,10 @@ Filter: ${@:-all rows}. If a filter is given, only refresh rows whose Printed Na
    - If there is no English version (e.g. `4bb`), find the same set/number in other languages
      (`/cards/search?q=set:<code> cn:<#> lang:any&unique=prints`), use the lowest available EUR price.
    - If no price is found at all, keep the old price and list the row in your report.
-   - Fetch all prices with one script (bash or python3), not one tool call per card.
-3. Update only the EUR and Price date columns (never change the Scryfall ID; if a row has none, fill it using the rule in `add-cards.md`) (Price date = `date +%Y-%m-%d`). Keep everything else unchanged,
+   - Fetch all prices with one script (bash or node), not one tool call per card.
+3. Update only the EUR and Price date columns (never change the Scryfall ID; if a row has none, fill it using the rule in the add-cards skill) (Price date = `date +%Y-%m-%d`). Keep everything else unchanged,
    Prices are plain numbers (e.g. `1.25`), with no `*` or `~` markers; leave Notes and Bought EUR as they are.
-4. Recompute the Summary (total cards = Σ Qty, estimated EUR = Σ Qty × EUR) with `python3`, not by hand.
+4. Recompute the Summary (total cards = Σ Qty, estimated EUR = Σ Qty × EUR) with `node`, not by hand.
 
 ## Report back
 A short table of rows whose price changed (name, code #, lang, foil, old EUR → new EUR), anything that could not be refreshed,

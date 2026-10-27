@@ -1,12 +1,13 @@
 ---
+name: add-cards
 description: Identify MTG cards from photos via Scryfall and add them to mtg-collection.md
 argument-hint: "<image-path> [more-image-paths...]"
 ---
 Identify the Magic: The Gathering cards in these photos and add them to my collection file.
 
-Photos: $@
+Photos: $ARGUMENTS
 
-Collection file: `mtg-collection.md` in the project root (the folder containing `.pi/`).
+Collection file: `mtg-collection.md` in the project root (the repo root).
 
 ## 0. Skip already-processed photos
 - The log `processed-screenshots.md` (project root) lists every photo already added, with file name and
@@ -19,7 +20,7 @@ Collection file: `mtg-collection.md` in the project root (the folder containing 
   logged too, so they are skipped next time.
 
 ## 1. Read the cards from the photos
-- Open each image with the `read` tool and read every card directly (no external OCR).
+- Open each image with the Read tool and read every card directly (no external OCR).
 - If a photo is sideways, rotate it first: `sips -r 90|270 <in> --out /tmp/rot.jpg`.
 - Photos often show binder pages. Only count the main page; ignore cards partly visible at the edges (adjacent pages).
 - Compare pages across photos: if two photos show the same page, count it once and mention the skipped photo in the report.
@@ -86,7 +87,7 @@ Use the Scryfall REST API (https://scryfall.com/docs/api) with `curl`, always se
 - Price date = today's date (`date +%Y-%m-%d`).
 - Do not add page/slot, condition, artist or USD columns.
 - Leave Notes empty: write the cell as `| |` (single space). Prices in EUR are plain numbers (e.g. `1.25`), with no `*` or `~` markers.
-- Recompute the Summary (total cards, estimated EUR = Σ Qty × EUR) with `python3`, not by hand.
+- Recompute the Summary (total cards, estimated EUR = Σ Qty × EUR) with `node`, not by hand.
 
 ## 5. Report back
 Briefly list what was added or updated (qty, name, set, EUR), the new totals, any photos skipped

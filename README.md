@@ -15,7 +15,7 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 | `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck. |
 | `receipts/` | CardTrader order spreadsheets (`.xls`). The Bought EUR column of the collection comes from them. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
-| `.pi/prompts/` | Prompt templates for [pi](https://pi.dev): `add-cards` and `refresh-prices`. |
+| `.claude/skills/` | [Claude Code](https://claude.com/claude-code) skills: `add-cards` and `refresh-prices`. |
 
 ## Run the viewer locally
 
@@ -84,23 +84,12 @@ Images load directly from Scryfall using the Scryfall ID column, so the collecti
 API calls. Deck lookups (mana cost, type, price) are cached in the browser for a day. Use **Clear Scryfall
 cache** in the page footer to force a refresh.
 
-## Updating the collection with pi
+## Updating the collection with Claude Code
 
-[pi](https://pi.dev) is a coding agent for the terminal. The prompt templates in `.pi/prompts/` become
-`/` commands when you run pi from this folder (pi asks you to trust the project the first time).
+[Claude Code](https://claude.com/claude-code) is a coding agent for the terminal. The skills in
+`.claude/skills/` become `/` commands when you run it from this folder.
 
-Install pi (needs Node.js 22.19+):
-
-```bash
-# macOS / Linux
-curl -fsSL https://pi.dev/install.sh | sh
-```
-```powershell
-# Windows (PowerShell)
-powershell -c "irm https://pi.dev/install.ps1 | iex"
-```
-
-Then start it in the repo folder with `pi`.
+Start it in the repo folder with `claude`.
 
 ### `/add-cards`: add cards from photos
 
@@ -143,4 +132,4 @@ and recomputes the summary.
 It reports the rows whose price changed (old → new), anything it could not refresh, and the old vs new
 estimated total. It never changes the Scryfall ID (it only fills it in if a row has none).
 
-After editing a prompt in `.pi/prompts/`, run `/reload` in an open pi session to pick up the change.
+The skills live in `.claude/skills/<name>/SKILL.md`; edit them there to change the behaviour.
