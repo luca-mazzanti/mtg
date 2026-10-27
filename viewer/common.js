@@ -400,9 +400,11 @@ const MTG = (() => {
 
   function nav(active) {
     const l = (href, label, k) => `<a href="${href}" class="${active === k ? 'active' : ''}">${label}</a>`;
-    return `<nav class="top">${l('/', 'Collection', 'collection')}${l('/decks.html', 'Decks', 'decks')}</nav>`;
+    return `<nav class="top">${l('/', 'Collection', 'collection')}${l('/decks.html', 'Decks', 'decks')}${l('/compare.html', 'Compare', 'compare')}</nav>`;
   }
 
-  return { esc, eur, key, fold, imageUrl, clearCache, manaHtml, manaValue, loadSets, typeGroup, TYPE_GROUPS, priceNum, parseCollection, loadCollection, ownedIndex, parseDecklist, countCards, checkDeck,
+  const isBasic = name => BASICS.has(key(name));
+
+  return { esc, eur, key, fold, isBasic, imageUrl, clearCache, manaHtml, manaValue, loadSets, typeGroup, TYPE_GROUPS, priceNum, parseCollection, loadCollection, ownedIndex, parseDecklist, countCards, checkDeck,
     scryfallInfo, resolveCardName, artUrl, renderCheck, openModal, openChecker, decks, deckFormHtml, readDeckForm, nav, bindCardHover };
 })();

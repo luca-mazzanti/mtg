@@ -63,6 +63,10 @@ files just refresh the browser. No restart is needed.
   for the current filters.
 - **Check decklist**: paste a decklist to see which cards you own (and which printings), what is missing,
   and roughly what the missing cards cost.
+- **Compare** (`/compare.html`): pick two decks (A and B) and see the cards only in A, in both (with both quantities,
+  differences ringed) and only in B, as a card gallery or a list, for the main deck or the sideboard. A red outline
+  means your collection has fewer copies than the bigger of the two lists needs. The URL keeps the choice
+  (`?a=<deck>&b=<deck>`).
 - **Decks** (`/decks.html`): your saved decks with completion bars. Create a deck with a name, a
   thumbnail card and a decklist; open one to see the full ownership report, grouped by card type and
   sorted by mana value. Edit mode lets you change or delete it.

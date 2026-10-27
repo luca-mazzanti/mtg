@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare decks · MTG Collection</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="titlebar">
+    <h1>Compare decks</h1>
+    <span class="spacer"></span>
+    <span id="nav"></span>
+  </div>
+  <div class="cmp-controls">
+    <span class="tag a">A</span><select id="a"></select>
+    <button id="swap" title="Swap A and B">⇄</button>
+    <span class="tag b">B</span><select id="b"></select>
+    <span class="spacer"></span>
+    <button id="zMain" class="active">Main deck</button><button id="zSide">Sideboard</button>
+    <button id="vGrid" class="active">Gallery</button><button id="vList">List</button>
+  </div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+<footer><a href="#" onclick="MTG.clearCache(); location.reload(); return false">Clear Scryfall cache</a> · Quantities are copies in each decklist. A red outline means your collection has fewer copies than the bigger of the two lists needs.</footer>
+
+<script src="/common.js"></script>
+<script>
+const { esc, decks, key, isBasic, parseDecklist, countCards, ownedIndex, loadCollection, scryfallInfo, manaHtml } = MTG;
+document.getElementById('nav').outerHTML = MTG.nav('compare');
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const state = { a: params.get('a') || '', b: params.get('b') || '', zone: 'main', view: localStorage.getItem('cmp-view') || 'grid' };
+let list = [], idx = new Map();
+
+function pushUrl() {
+  const p = new URLSearchParams();
+  if (state.a) p.set('a', state.a);
+  if (state.b) p.set('b', state.b);
+  history.replaceState(null, '', location.pathname + (p.size ? '?' + p : ''));
+}
+
+// Join two parsed card lists by name: [{ name, a, b }] (a / b = copies, 0 if absent).
+function join(la, lb) {
+  const m = new Map();
+  for (const c of la) m.set(key(c.name), { name: c.name, a: c.qty, b: 0 });
+  for (const c of lb) {
+    const e = m.get(key(c.name));
+    if (e) e.b += c.qty; else m.set(key(c.name), { name: c.name, a: 0, b: c.qty });
+  }
+  return [...m.values()];
+}
+
+async function render() {
+  const main = $('main');
+  const A = list.find(d => d.id === state.a), B = list.find(d => d.id === state.b);
+  if (!A || !B) { main.innerHTML = '<div class="empty">Pick two decks to compare.</div>'; return; }
+  const pa = parseDecklist(A.list), pb = parseDecklist(B.list);
+  const rows = join(pa[state.zone], pb[state.zone]);
+  main.innerHTML = '<div class="empty">Looking up cards…</div>';
+  const info = await scryfallInfo(rows.map(r => r.name));
+  for (const r of rows) {
+    const i = info.get(key(r.name));
+    r.img = i?.image || ''; r.cmc = i?.cmc ?? 0; r.mana = i?.mana ?? '';
+    r.own = isBasic(r.name) ? Infinity : (idx.get(key(r.name))?.qty || 0);
+  }
+  const byCmc = (x, y) => x.cmc - y.cmc || x.name.localeCompare(y.name);
+  const onlyA = rows.filter(r => r.a && !r.b).sort(byCmc);
+  const onlyB = rows.filter(r => !r.a && r.b).sort(byCmc);
+  const both = rows.filter(r => r.a && r.b).sort(byCmc);
+  const shared = both.reduce((s, r) => s + Math.min(r.a, r.b), 0);
+  const totA = countCards(pa[state.zone]), totB = countCards(pb[state.zone]);
+  const sameQty = both.filter(r => r.a === r.b).length;
+  const pct = n => totA + totB ? n / Math.max(totA, totB) * 100 : 0;
+  const onlyACopies = totA - shared, onlyBCopies = totB - shared;
+  const tot = shared + onlyACopies + onlyBCopies;
+
+  const tile = (r, cls) => {
+    const need = Math.max(r.a, r.b), miss = r.own < need;
+    const q = cls === 'both'
+      ? `<span class="q a${r.a !== r.b ? ' diff' : ''}">${r.a}</span><span class="q b${r.a !== r.b ? ' diff' : ''}">${r.b}</span>`
+      : `<span class="q only ${cls}">${r.a || r.b}</span>`;
+    return `<div class="tile${miss ? ' miss' : ''}" title="${esc(r.name)}${miss ? ` · you own ${r.own}` : ''}">
+      <div class="pic">${r.img ? `<img loading="lazy" src="${esc(r.img)}" alt="${esc(r.name)}">` : ''}${q}</div>
+      <div class="nm">${esc(r.name)}</div>${miss ? `<div class="own">own ${r.own}/${need}</div>` : ''}</div>`;
+  };
+  const li = (r, cls) => {
+    const need = Math.max(r.a, r.b), miss = r.own < need;
+    const q = cls === 'both'
+      ? `<span class="q a${r.a !== r.b ? ' diff' : ''}">${r.a}</span><span class="q b${r.a !== r.b ? ' diff' : ''}">${r.b}</span>`
+      : `<span class="q ${cls}">${r.a || r.b}</span>`;
+    return `<li>${q}<a href="https://scryfall.com/search?q=${encodeURIComponent('!"' + r.name + '"')}" target="_blank" rel="noopener" data-card="${esc(r.name)}">${esc(r.name)}</a>
+      <span class="mana">${manaHtml(r.mana)}</span>${miss ? `<span class="own">own ${r.own}/${need}</span>` : ''}</li>`;
+  };
+  const col = (cls, title, items, cardsN, kind) => `<section class="cmp-col ${cls}">
+    <h3><span class="dot"></span>${title}<small>${items.length} card${items.length === 1 ? '' : 's'} · ${cardsN} copies</small></h3>
+    ${items.length ? (state.view === 'grid'
+      ? `<div class="cmp-tiles">${items.map(r => tile(r, kind)).join('')}</div>`
+      : `<ul class="cmp-list">${items.map(r => li(r, kind)).join('')}</ul>`) : '<div class="hint">Nothing.</div>'}
+  </section>`;
+
+  main.innerHTML = `
+    <div class="cmp-sum">
+      <div class="pill">${state.zone === 'main' ? 'Main deck' : 'Sideboard'}: <b>${esc(A.name)}</b> ${totA} vs <b>${esc(B.name)}</b> ${totB}</div>
+      <div class="pill">Shared copies <b>${shared}</b> (${Math.round(pct(shared))}%)</div>
+      <div class="pill">${both.length} cards in both${both.length - sameQty ? `, <b>${both.length - sameQty}</b> with different quantities` : ', same quantities'}</div>
+    </div>
+    <div class="cmp-bar" title="only A / shared / only B (copies)">
+      <span class="a" style="width:${tot ? onlyACopies / tot * 100 : 0}%"></span><span class="s" style="width:${tot ? shared / tot * 100 : 0}%"></span><span class="b" style="width:${tot ? onlyBCopies / tot * 100 : 0}%"></span>
+    </div>
+    <div class="cmp-cols">
+      ${col('a', `Only in A · ${esc(A.name)}`, onlyA, onlyA.reduce((s, r) => s + r.a, 0), 'a')}
+      ${col('both', 'In both', both, shared, 'both')}
+      ${col('b', `Only in B · ${esc(B.name)}`, onlyB, onlyB.reduce((s, r) => s + r.b, 0), 'b')}
+    </div>`;
+  if (!main.dataset.hoverBound) { MTG.bindCardHover(main); main.dataset.hoverBound = '1'; }
+}
+
+function sync() {
+  $('zMain').classList.toggle('active', state.zone === 'main'); $('zSide').classList.toggle('active', state.zone === 'side');
+  $('vGrid').classList.toggle('active', state.view === 'grid'); $('vList').classList.toggle('active', state.view === 'list');
+  $('a').value = state.a; $('b').value = state.b;
+  pushUrl();
+}
+
+(async () => {
+  try {
+    [list, idx] = await Promise.all([decks.list(), loadCollection().then(ownedIndex)]);
+    list.sort((x, y) => x.name.localeCompare(y.name));
+    for (const id of ['a', 'b']) {
+      $(id).innerHTML = '<option value="">Choose a deck…</option>' + list.map(d => `<option value="${esc(d.id)}">${esc(d.name)}</option>`).join('');
+      $(id).onchange = () => { state[id] = $(id).value; sync(); render(); };
+    }
+    $('swap').onclick = () => { [state.a, state.b] = [state.b, state.a]; sync(); render(); };
+    $('zMain').onclick = () => { state.zone = 'main'; sync(); render(); };
+    $('zSide').onclick = () => { state.zone = 'side'; sync(); render(); };
+    $('vGrid').onclick = () => { state.view = 'grid'; localStorage.setItem('cmp-view', 'grid'); sync(); render(); };
+    $('vList').onclick = () => { state.view = 'list'; localStorage.setItem('cmp-view', 'list'); sync(); render(); };
+    sync(); await render();
+  } catch (e) {
+    $('main').innerHTML = `<div class="error">Could not load decks: ${esc(e.message)}</div>`;
+  }
+})();
+</script>
+</body>
+</html>
