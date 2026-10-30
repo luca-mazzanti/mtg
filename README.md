@@ -12,7 +12,7 @@ Card data, prices and images come from [Scryfall](https://scryfall.com/docs/api)
 | `mtg-collection.md` | The collection: one row per printing (set + number + language + foil), with quantity, color, color identity, type, mana cost, EUR price, what I paid (Bought EUR), notes and Scryfall ID. |
 | `processed-screenshots.md` | Log of binder photos already added, so they are never counted twice. |
 | `screenshots/` | Photos of binder pages (and deck lists) that the cards were read from. |
-| `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck. |
+| `decks/` | The decks: one plain-text decklist per file (`4 Card Name`, blank line before the sideboard), named after the deck. `thumbnails.json` holds the chosen thumbnail card per deck, `details.json` the optional description, link, label cards and thumbnail printing, and `layout.json` the sections and order on the Decks page. |
 | `receipts/` | CardTrader order spreadsheets (`.xls`). The Bought EUR column of the collection comes from them. |
 | `viewer/` | The local web viewer (a small Node.js server and static pages). |
 | `.claude/skills/` | [Claude Code](https://claude.com/claude-code) skills: `add-cards`, `refresh-prices` and `analyse-meta`. |
@@ -71,7 +71,10 @@ files just refresh the browser. No restart is needed.
   (`?a=<deck>&b=<deck>`).
 - **Decks** (`/decks.html`): your saved decks with completion bars. Create a deck with a name, a
   thumbnail card and a decklist; open one to see the full ownership report, grouped by card type and
-  sorted by mana value. Edit mode lets you change or delete it.
+  sorted by mana value, as a list or a card gallery (with a zoom). Edit mode lets you change or delete it.
+  Each deck can also have a description, a link, up to 3 label cards (shown as chips) and a choice of
+  printing for the thumbnail art. The page switches between a tile gallery and a compact list, and decks
+  are grouped in collapsible sections you can reorder by drag and drop.
   Every `.txt` file in `decks/` is a deck, named after the file; a deck without a saved thumbnail uses its first
   non-basic card. Editing or deleting a deck in the viewer changes the file.
 
