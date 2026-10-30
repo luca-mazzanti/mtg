@@ -38,11 +38,25 @@ async function readThumbs() {
   try { return JSON.parse(await fs.readFile(THUMBS_FILE, 'utf8')); }
   catch (e) { if (e.code === 'ENOENT') return {}; throw e; }
 }
+// Description, link and up to 3 label cards per deck live in decks/details.json: {"<deck name>": {description, link, labels}}.
+const DETAILS_FILE = path.join(DECKS_DIR, 'details.json');
+async function readDetails() {
+  try { return JSON.parse(await fs.readFile(DETAILS_FILE, 'utf8')); }
+  catch (e) { if (e.code === 'ENOENT') return {}; throw e; }
+}
+// Set (or with d = null remove) a deck's details; oldName is dropped when the deck was renamed.
+async function saveDetails(name, d, oldName) {
+  const all = await readDetails();
+  if (oldName && oldName !== name) delete all[oldName];
+  if (d && (d.description || d.link || d.labels.length || d.thumbnailSet)) all[name] = { description: d.description, link: d.link, labels: d.labels, thumbnailSet: d.thumbnailSet };
+  else delete all[name];
+  await writeFileAtomic(DETAILS_FILE, JSON.stringify(all, null, 2) + '\n');
+}
 async function readDecks() {
   let names;
   try { names = await fs.readdir(DECKS_DIR); }
   catch (e) { if (e.code === 'ENOENT') return []; throw e; }
-  const thumbs = await readThumbs();
+  const [thumbs, details] = await Promise.all([readThumbs(), readDetails()]);
   const decks = [];
   for (const file of names.filter(n => /\.txt$/i.test(n)).sort((x, y) => x.localeCompare(y))) {
     const full = path.join(DECKS_DIR, file);
@@ -50,6 +64,7 @@ async function readDecks() {
     const name = file.replace(/\.txt$/i, '');
     const list = textOf(raw);
     decks.push({ id: name, name, thumbnail: thumbs[name] || firstSpell(list), list,
+      description: details[name]?.description || '', link: details[name]?.link || '', labels: details[name]?.labels || [], thumbnailSet: details[name]?.thumbnailSet || '',
       createdAt: (st.birthtimeMs ? st.birthtime : st.mtime).toISOString(), updatedAt: st.mtime.toISOString() });
   }
   return decks;
@@ -110,7 +125,15 @@ function validate(body) {
     name: String(body?.name ?? '').trim(),
     thumbnail: String(body?.thumbnail ?? '').trim(),
     list: String(body?.list ?? '').replace(/\r\n/g, '\n').replace(/\s+$/, ''),
+    description: String(body?.description ?? '').replace(/\r\n/g, '\n').trim(),
+    link: String(body?.link ?? '').trim(),
+    thumbnailSet: String(body?.thumbnailSet ?? '').trim().toLowerCase(),
+    labels: [...new Set((Array.isArray(body?.labels) ? body.labels : []).map(l => String(l).trim()).filter(Boolean))],
   };
+  if (d.description.length > 5000) throw fail(400, 'Description is too long');
+  if (d.link && !(d.link.length <= 500 && /^https?:\/\/\S+$/i.test(d.link))) throw fail(400, 'The link must start with http:// or https://');
+  if (d.thumbnailSet && !/^[a-z0-9]{2,8}$/.test(d.thumbnailSet)) throw fail(400, 'Invalid set code');
+  if (d.labels.length > 3 || d.labels.some(l => l.length > 200)) throw fail(400, 'Choose up to 3 label cards');
   if (!d.name) throw fail(400, 'Deck name is required');
   if (!fileStem(d.name)) throw fail(400, 'Deck name has no usable characters');
   if (!d.thumbnail) throw fail(400, 'Thumbnail card is required');
@@ -123,6 +146,7 @@ async function createDeck(d) {
   if (await exists(file)) throw fail(409, `A deck called "${name}" already exists`);
   await writeFileAtomic(file, d.list + '\n');
   await saveThumb(name, d.thumbnail);
+  await saveDetails(name, d);
   return (await readDecks()).find(x => x.id === name);
 }
 // Deck ids are file names: only ever used after matching a name read from the folder, never joined from input.
@@ -139,12 +163,14 @@ async function updateDeck(oldId, d) {
   await writeFileAtomic(file, (crlf ? d.list.replace(/\n/g, '\r\n') : d.list) + (crlf ? '\r\n' : '\n'));
   if (name !== oldId) { await fs.unlink(fileOf(oldId)); await relayout(oldId, name); }
   await saveThumb(name, d.thumbnail, oldId);
+  await saveDetails(name, d, oldId);
   return (await readDecks()).find(x => x.id === name);
 }
 async function deleteDeck(id) {
   id = await knownId(id);
   await fs.unlink(fileOf(id));
   await relayout(id, null);
+  await saveDetails(id, null);
   const thumbs = await readThumbs();
   if (id in thumbs) { delete thumbs[id]; await writeFileAtomic(THUMBS_FILE, JSON.stringify(thumbs, null, 2) + '\n'); }
 }

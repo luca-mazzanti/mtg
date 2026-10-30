@@ -43,11 +43,14 @@ function render() {
   const nMain = MTG.countCards(parsed.main), nSide = MTG.countCards(parsed.side);
   main.innerHTML = `
     <div class="deck-hero">
-      <div class="art" style="background-image:url('${esc(artUrl(deck.thumbnail))}')" title="${esc(deck.thumbnail)}"></div>
+      <div class="art" style="background-image:url('${esc(artUrl(deck.thumbnail, deck.thumbnailSet))}')" title="${esc(deck.thumbnail)}"></div>
       <div>
         <h2>${esc(deck.name)}</h2>
-        <div class="hint">${nMain} main deck${nSide ? ` · ${nSide} sideboard` : ''} · thumbnail: ${esc(deck.thumbnail)}
+        <div class="hint">${nMain} main deck${nSide ? ` · ${nSide} sideboard` : ''} · thumbnail: ${esc(deck.thumbnail)}${deck.thumbnailSet ? ` (${esc(deck.thumbnailSet.toUpperCase())})` : ''}
           · updated ${esc(new Date(deck.updatedAt).toLocaleString())}</div>
+        ${deck.labels?.length ? `<div class="chips">${deck.labels.map(l => `<span class="chip">${esc(l)}</span>`).join('')}</div>` : ''}
+        ${deck.link ? `<div class="deck-link"><a href="${esc(deck.link)}" target="_blank" rel="noopener noreferrer">${esc(deck.link)}</a></div>` : ''}
+        ${deck.description ? `<p class="deck-desc">${esc(deck.description)}</p>` : ''}
         <div class="actions">
           <button id="toggleEdit" class="${editing ? 'active' : ''}">${editing ? 'Exit edit mode' : 'Edit'}</button>
           <button id="copyList">Copy decklist</button>
@@ -68,6 +71,7 @@ function render() {
     };
     body.innerHTML = `<div class="modal" style="width:auto;margin-top:12px">${MTG.deckFormHtml(deck)}
       <div class="row"><button class="primary" id="save">Save changes</button><button id="cancel">Cancel</button></div></div>`;
+    MTG.bindDeckForm(body);
     document.getElementById('cancel').onclick = () => { editing = false; render(); };
     const btn = document.getElementById('save');
     btn.onclick = async () => {
@@ -85,16 +89,25 @@ function render() {
     <div class="view-opts">
       <label>Group <select id="group">
         <option value="type">By type</option><option value="none">None (main deck / sideboard)</option></select></label>
+      <span class="seg"><button id="vList">List</button><button id="vGrid">Gallery</button></span>
+      <label class="zoom" id="zoomWrap" title="Gallery card size">Zoom
+        <select id="zoom"><option value="100">XS</option><option value="130">S</option><option value="150">M</option><option value="200">L</option><option value="280">XL</option></select></label>
       <label>Sort by mana value <select id="order">
         <option value="asc">Ascending</option><option value="desc">Descending</option></select></label>
     </div>
     <div id="report"><p class="hint">Checking against the collection…</p></div>`;
-  const opts = { group: localStorage.getItem('deck-group') || 'type', order: localStorage.getItem('deck-order') || 'asc' };
+  const opts = { group: localStorage.getItem('deck-group') || 'type', order: localStorage.getItem('deck-order') || 'asc', view: localStorage.getItem('deck-view') || 'list', zoom: localStorage.getItem('deck-zoom') || '150' };
   const groupEl = document.getElementById('group'), orderEl = document.getElementById('order');
   groupEl.value = opts.group; orderEl.value = opts.order;
   const report = document.getElementById('report');
   let result;
-  const draw = () => MTG.renderCheck(report, result, opts);
+  const zoomEl = document.getElementById('zoom');
+  zoomEl.value = opts.zoom;
+  zoomEl.onchange = () => { opts.zoom = zoomEl.value; localStorage.setItem('deck-zoom', opts.zoom); draw(); };
+  const syncView = () => { document.getElementById('zoomWrap').style.display = opts.view === 'gallery' ? '' : 'none'; document.getElementById('vList').classList.toggle('active', opts.view === 'list'); document.getElementById('vGrid').classList.toggle('active', opts.view === 'gallery'); };
+  const draw = () => { syncView(); return MTG.renderCheck(report, result, opts); };
+  document.getElementById('vList').onclick = () => { opts.view = 'list'; localStorage.setItem('deck-view', 'list'); draw(); };
+  document.getElementById('vGrid').onclick = () => { opts.view = 'gallery'; localStorage.setItem('deck-view', 'gallery'); draw(); };
   groupEl.onchange = () => { opts.group = groupEl.value; localStorage.setItem('deck-group', opts.group); draw(); };
   orderEl.onchange = () => { opts.order = orderEl.value; localStorage.setItem('deck-order', opts.order); draw(); };
   MTG.loadCollection()

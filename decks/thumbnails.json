@@ -1,11 +1,13 @@
 {
   "Mono Red Madness by _Venom_": "Lightning Bolt",
   "Grixis Affinity by CrilaPeoty": "Krark-Clan Shaman",
-  "Mono Red Madness (twinned vision,moxite)": "Twinned Vision",
   "Esper Affinity by Maz": "Glint Hawk",
   "Esper Affinity Aggro": "Thraben Inspector",
   "Dimir Terror": "Sneaky Snacker",
   "Elves": "Avenging Hunter",
   "Mono-Blue Terror": "Tolarian Terror",
-  "Mono Red Madness": "Guttersnipe"
+  "Mono Red Madness": "Guttersnipe",
+  "Mono Red Madness 2": "Melded Moxite",
+  "Tron": "Bramble Wurm",
+  "Dimir Control": "Baleful Strix"
 }

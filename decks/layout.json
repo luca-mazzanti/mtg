@@ -5,18 +5,19 @@
       "name": "2026 Novembre",
       "collapsed": false,
       "decks": [
-        "Mono-Blue Terror",
         "Esper Affinity Aggro",
         "Esper Affinity by Maz",
-        "Deck - Dimir Control",
-        "Mono Red Madness (twinned vision,moxite)"
+        "Dimir Control",
+        "Mono Red Madness 2",
+        "Mono-Blue Terror"
       ]
     }
   ],
   "unsorted": [
+    "Mono Red Madness",
     "Dimir Terror",
     "Elves",
-    "Mono Red Madness",
-    "Deck - Tron"
-  ]
+    "Tron"
+  ],
+  "unsortedCollapsed": false
 }

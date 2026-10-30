@@ -221,7 +221,7 @@ const MTG = (() => {
     const c = await res.json();
     return c.object === 'card' ? c.name : null;
   }
-  const artUrl = name => 'https://api.scryfall.com/cards/named?format=image&version=art_crop&exact=' + encodeURIComponent(name);
+  const artUrl = (name, set) => 'https://api.scryfall.com/cards/named?format=image&version=art_crop&exact=' + encodeURIComponent(name) + (set ? '&set=' + encodeURIComponent(set) : '');
   const cardImgUrl = name => 'https://api.scryfall.com/cards/named?format=image&version=normal&exact=' + encodeURIComponent(name);
 
   // ---------- rendering ----------
@@ -237,7 +237,7 @@ const MTG = (() => {
   // opts.group: 'none' (main deck / sideboard) | 'type' (main deck by card type, then sideboard)
   // opts.order: null (list order) | 'asc' | 'desc' — by mana value, then name.
   async function renderCheck(el, result, opts = {}) {
-    const { group = 'none', order = null } = opts;
+    const { group = 'none', order = null, view = 'list', zoom = '150' } = opts;
     const all = [...result.main, ...result.side];
     if (!all.every(l => infoCache.has(key(l.name)))) el.innerHTML = '<p class="hint">Looking up cards on Scryfall…</p>';
     const info = await scryfallInfo(all.map(l => l.name));
@@ -247,6 +247,7 @@ const MTG = (() => {
     for (const l of all) {
       const i = info.get(key(l.name));
       const own = l.ownedRows[0];
+      l.img = i?.image || '';
       l.mana = i?.mana ?? own?.mana ?? '';
       l.cmc = i?.cmc ?? own?.cmc ?? manaValue(l.mana);
       l.typeLine = i?.type ?? own?.type ?? (l.basic ? 'Basic Land' : '');
@@ -277,10 +278,17 @@ const MTG = (() => {
         <td class="prints">${l.basic ? 'basic land (not tracked)' : esc(printingsText(l.ownedRows))}${l.ownedTotal > l.have && !l.basic ? ` <i>(${l.ownedTotal} owned in total)</i>` : ''}</td></tr>`;
     };
     const head = '<thead><tr><th></th><th class="num">Need</th><th>Card</th><th>Mana</th><th class="num">Have</th><th class="num">Missing</th><th class="num">€ missing</th><th>Owned printings</th></tr></thead>';
+    const tile = l => {
+      const cls = l.basic ? '' : l.missing === 0 ? '' : ' miss';
+      return `<div class="tile${cls}" title="${esc(l.name)}${l.missing ? ` · you own ${l.have} of ${l.qty}` : ''}">
+        <div class="pic">${l.img ? `<img loading="lazy" src="${esc(l.img)}" alt="${esc(l.name)}">` : ''}<span class="q only">${l.qty}</span></div>
+        <div class="nm">${esc(l.name)}</div>${l.missing ? `<div class="own">own ${l.have}/${l.qty}</div>` : ''}</div>`;
+    };
     const section = g => {
       const need = g.lines.reduce((s, l) => s + l.qty, 0), have = g.lines.reduce((s, l) => s + l.have, 0);
       return `<h3 class="${g.side ? 'side' : ''}">${esc(g.title)} <span>${need} card${need === 1 ? '' : 's'}${have < need ? ` · ${need - have} missing` : ''}</span></h3>
-        <table class="check-table">${head}<tbody>${sorted(g.lines).map(row).join('')}</tbody></table>`;
+        ${view === 'gallery' ? `<div class="cmp-tiles" style="--tile-w:${+zoom || 150}px">${sorted(g.lines).map(tile).join('')}</div>`
+          : `<table class="check-table">${head}<tbody>${sorted(g.lines).map(row).join('')}</tbody></table>`}`;
     };
 
     el.innerHTML = `<div class="check">
@@ -381,23 +389,83 @@ const MTG = (() => {
   function deckFormHtml(d = {}) {
     return `<div class="form deck-form">
       <label class="field">Deck name <input name="name" value="${esc(d.name || '')}" placeholder="Mono-Red Burn"></label>
-      <label class="field">Thumbnail card <input name="thumbnail" value="${esc(d.thumbnail || '')}" placeholder="Fireblast"></label>
+      <div class="field-block">Thumbnail <span class="hint">(a card of the deck, and optionally the set of the printing to show)</span>
+        <div class="thumb-pick" data-thumb="${esc(d.thumbnail || '')}" data-set="${esc(d.thumbnailSet || '')}"><select name="thumbnail"></select><select name="thumbnailSet"></select></div></div>
+      <label class="field">Description <textarea name="description" rows="4" placeholder="Notes about the deck, how it plays, where it came from…">${esc(d.description || '')}</textarea></label>
+      <label class="field">Link <input name="link" type="url" value="${esc(d.link || '')}" placeholder="https://…"></label>
+      <div class="field-block">Labels <span class="hint">(up to 3 main cards shown on the deck in the list)</span>
+        <div class="label-pick" data-labels="${esc(JSON.stringify(d.labels || []))}"></div></div>
       <label class="field">Decklist <textarea name="list" rows="16" placeholder="4 Lightning Bolt\n4 Fireblast\n20 Mountain\n\n2 Pyroblast">${esc(d.list || '')}</textarea></label>
       <div class="hint">One card per line (<code>4 Card name</code>). A blank line or a "Sideboard" line starts the sideboard.</div>
       <div class="err form-err"></div>
     </div>`;
   }
+  // Fill the thumbnail and label selects from the cards of the decklist and keep them in step while it is edited.
+  const printsCache = new Map();
+  async function printingsOf(name) {
+    if (printsCache.has(name)) return printsCache.get(name);
+    let sets = [];
+    try {
+      const res = await fetch('https://api.scryfall.com/cards/search?unique=prints&order=released&dir=desc&q=' + encodeURIComponent('!"' + name + '"'), { headers: { Accept: 'application/json' } });
+      if (res.ok) {
+        const seen = new Set();
+        for (const c of (await res.json()).data) if (!seen.has(c.set)) { seen.add(c.set); sets.push({ code: c.set, name: c.set_name }); }
+      }
+    } catch { /* offline: only the default printing is offered */ }
+    printsCache.set(name, sets);
+    return sets;
+  }
+  function bindDeckForm(root) {
+    const box = root.querySelector('.label-pick'), ta = root.querySelector('[name=list]');
+    const tp = root.querySelector('.thumb-pick'), thumbSel = tp.querySelector('[name=thumbnail]'), setSel = tp.querySelector('[name=thumbnailSet]');
+    let chosen = JSON.parse(box.dataset.labels || '[]'), thumb = tp.dataset.thumb, wantSet = tp.dataset.set, setsFor = null;
+    const cardNames = () => {
+      const seen = new Set(), names = [];
+      for (const c of parseDecklist(ta.value).main) if (!isBasic(c.name) && !seen.has(key(c.name))) { seen.add(key(c.name)); names.push(c.name); }
+      return names.sort((a, b) => a.localeCompare(b));
+    };
+    const buildSets = async () => {
+      const name = thumbSel.value;
+      if (!name) { setSel.innerHTML = '<option value="">Latest printing</option>'; setsFor = null; return; }
+      if (name === setsFor) return;
+      setsFor = name;
+      setSel.innerHTML = '<option value="">Latest printing</option>';
+      const sets = await printingsOf(name);
+      if (setsFor !== name) return; // the card changed while loading
+      const keep = wantSet;
+      setSel.innerHTML = '<option value="">Latest printing</option>' + sets.map(s => `<option${s.code === keep ? ' selected' : ''} value="${esc(s.code)}">${esc(s.code.toUpperCase())} · ${esc(s.name)}</option>`).join('');
+    };
+    const build = () => {
+      const names = cardNames();
+      box.querySelectorAll('select').forEach((sel, i) => { chosen[i] = sel.value; });
+      box.innerHTML = [0, 1, 2].map(i => {
+        const v = names.find(n => key(n) === key(chosen[i] || '')) || '';
+        return `<select name="label${i}"><option value="">— none —</option>${names.map(n => `<option${n === v ? ' selected' : ''} value="${esc(n)}">${esc(n)}</option>`).join('')}</select>`;
+      }).join('');
+      // the thumbnail may be a card that is not in the main deck any more: keep it as an option until another is picked
+      if (thumbSel.value) thumb = thumbSel.value;
+      const opts = names.includes(thumb) || !thumb ? names : [thumb, ...names];
+      const pick = opts.find(n => key(n) === key(thumb)) || opts[0] || '';
+      thumbSel.innerHTML = opts.map(n => `<option${n === pick ? ' selected' : ''} value="${esc(n)}">${esc(n)}</option>`).join('') || '<option value="">— add cards to the list —</option>';
+      buildSets();
+    };
+    thumbSel.addEventListener('change', () => { thumb = thumbSel.value; wantSet = ''; buildSets(); });
+    setSel.addEventListener('change', () => { wantSet = setSel.value; });
+    ta.addEventListener('input', build);
+    build();
+  }
   async function readDeckForm(root) {
     const v = n => root.querySelector(`[name=${n}]`).value.trim();
-    const name = v('name'), thumbnailIn = v('thumbnail'), list = root.querySelector('[name=list]').value.replace(/\s+$/, '');
+    const name = v('name'), thumbnail = v('thumbnail'), list = root.querySelector('[name=list]').value.replace(/\s+$/, '');
     if (!name) throw new Error('Give the deck a name.');
-    if (!thumbnailIn) throw new Error('Choose a card name for the thumbnail.');
+    if (!thumbnail) throw new Error('Choose a card for the thumbnail.');
     const parsed = parseDecklist(list);
     if (!parsed.main.length) throw new Error('The decklist has no cards.');
     if (parsed.errors.length) throw new Error(`Could not read these lines: ${parsed.errors.join(' | ')}`);
-    const thumbnail = await resolveCardName(thumbnailIn);
-    if (!thumbnail) throw new Error(`Scryfall doesn't know a card called "${thumbnailIn}".`);
-    return { name, thumbnail, list };
+    const link = v('link');
+    if (link && !/^https?:\/\/\S+$/i.test(link)) throw new Error('The link must start with http:// or https://');
+    const labels = [0, 1, 2].map(i => root.querySelector(`[name=label${i}]`).value).filter(Boolean);
+    return { name, thumbnail, thumbnailSet: root.querySelector('[name=thumbnailSet]').value, list, description: root.querySelector('[name=description]').value.trim(), link, labels };
   }
 
   function nav(active) {
@@ -408,5 +476,5 @@ const MTG = (() => {
   const isBasic = name => BASICS.has(key(name));
 
   return { esc, eur, key, fold, isBasic, imageUrl, clearCache, manaHtml, manaValue, loadSets, typeGroup, TYPE_GROUPS, priceNum, parseCollection, loadCollection, ownedIndex, parseDecklist, countCards, checkDeck,
-    scryfallInfo, resolveCardName, artUrl, renderCheck, openModal, openChecker, decks, deckFormHtml, readDeckForm, nav, bindCardHover };
+    scryfallInfo, resolveCardName, artUrl, renderCheck, openModal, openChecker, decks, deckFormHtml, bindDeckForm, readDeckForm, nav, bindCardHover };
 })();
