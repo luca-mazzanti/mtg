@@ -4,5 +4,25 @@
     "link": "",
     "labels": [],
     "thumbnailSet": "rtr"
+  },
+  "Temur Tron": {
+    "description": "",
+    "link": "",
+    "labels": [
+      "Bramble Wurm",
+      "Generous Ent",
+      "Boulderbranch Golem"
+    ],
+    "thumbnailSet": ""
+  },
+  "Dimir Faires": {
+    "description": "",
+    "link": "https://www.mtggoldfish.com/archetype/pauper-dimir-faeries-625747e4-1ba6-4401-af7b-5c8033a12c6c",
+    "labels": [
+      "Spellstutter Sprite",
+      "Faerie Seer",
+      "Augur of Bolas"
+    ],
+    "thumbnailSet": "mma"
   }
 }
